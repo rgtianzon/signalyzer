@@ -16,8 +16,8 @@ mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
     console.log('error');
     })
 
-
 const Task = require('./models/tasks');
+const Roster = require('./models/roster');
 const { render } = require("ejs");
 
 
@@ -42,6 +42,45 @@ app.get('/agenthome', (req, res) => {
 app.get('/adminhome', (req, res) => {
     res.render('adminhome');
 });
+
+
+//roster management
+
+app.get('/rostermanagement', async (req, res) => {
+    const roster = await Roster.find({})
+    res.render('rostermanagement', { roster });
+})
+
+app.post('/rostermanagement', async (req, res) => {
+    const roster = await Roster.find({})
+    req.body.sigID = roster[roster.length - 1].sigID + 1;
+    const existUserName = await Roster.find({userName: req.body.userName});
+    if (existUserName[0] == null) {
+        const { sigID, firstName, lastName, userName, password, isActive, isAdmin } = req.body;
+        const hash = await bcrypt.hash(password, 12);
+        const user = new Roster({
+            sigID,
+            firstName,
+            lastName,
+            userName,
+            password: hash,
+            isActive,
+            isAdmin
+        })
+        await user.save()
+            .then(() => {
+            res.redirect(`/rostermanagement`)
+        })
+    } else {
+        res.send(`Username ${req.body.userName} is already taken!`)
+    }
+    // res.render('rostermanagement', { roster });
+})
+
+app.get('/edituser', (req, res) => {
+    res.render('rmedituser');
+})
+
 
 // Adding Task
 
