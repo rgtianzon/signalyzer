@@ -37,8 +37,6 @@ mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 
 const Task = require('./models/tasks');
 const Roster = require('./models/roster');
-const { render } = require("ejs");
-const { route } = require("./routes/roster");
 const passport = require("passport");
 
 
@@ -69,18 +67,40 @@ app.post('/', async (req, res) => {
     const user = await Roster.findOne({ userName });
     const validpw = await bcrypt.compare(password, user.password)
     if (validpw) {
-        res.render('agenthome');
+        if (user.isActive) {
+            // res.cookie('name', user.userName);
+            req.session.user_id = user._id;
+            if (user.isAdmin) {
+                res.render('adminhome')
+            } else {
+                res.render('agenthome')
+            }
+        } else {
+            res.render('home')
+        }
     } else {
-        res.send('Try again');
+        res.render('home')
     }
 });
 
 app.get('/agenthome', (req, res) => {
+    res.redirect('/');
     res.render('agenthome');
 });
 
-app.get('/adminhome', (req, res) => {
-    res.render('adminhome');
+app.post('/logout', (req, res) => {
+    req.session.user_id = null;
+    res.redirect('/');
+})
+
+// admin routes
+
+app.get('/adminhome', async (req, res) => {
+    if (req.session.user_id.isAdmin) {
+        res.render('adminhome');
+    } else {
+        res.redirect('/agenthome')
+    }
 });
 
 // router management route
