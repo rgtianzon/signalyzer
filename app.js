@@ -4,6 +4,7 @@ const path = require("path");
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
+const bcrypt = require('bcrypt');
 
 // connecting to database
 const dbUrl = process.env.DB_URL || 'mongodb+srv://admin:TriskelioN12@cluster0.o9j4k.mongodb.net/signals?retryWrites=true&w=majority';
@@ -17,6 +18,7 @@ mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 
 
 const Task = require('./models/tasks');
+const { render } = require("ejs");
 
 
 app.engine('ejs', ejsMate)
@@ -29,10 +31,16 @@ app.use(methodOverride('_method'));
 app.use(methodOverride('_method'));
 
 
-
-
 app.get('/', (req, res) => {
     res.render('home');
+});
+
+app.get('/agenthome', (req, res) => {
+    res.render('agenthome');
+});
+
+app.get('/adminhome', (req, res) => {
+    res.render('adminhome');
 });
 
 // Adding Task
