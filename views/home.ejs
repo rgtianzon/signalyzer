@@ -11,6 +11,9 @@
         body {
             text-align: center;
         }
+        div {
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -20,12 +23,12 @@
             <div class="col-md-4 col-sm-4">
                 <h1>SIGN IN</h1>
                 <p>Hello! Sign in now to your Signalizer account</p>
-                <form>
+                <form action="/" method="POST">
                     <div>
-                        <Input type="text" placeholder="USERNAME"></Input>
+                        <Input name="userName" type="text" placeholder="USERNAME"></Input>
                     </div>
                     <div>
-                        <Input type="password" placeholder="PASSWORD"></Input>
+                        <Input name="password" type="password" placeholder="PASSWORD"></Input>
                     </div>
                     <button class="btn btn-success">LOG IN</button>
                 </form>

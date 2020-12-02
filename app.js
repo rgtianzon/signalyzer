@@ -3,8 +3,27 @@ const app = express();
 const path = require("path");
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
+const session = require('express-session');
 const methodOverride = require('method-override');
 const bcrypt = require('bcrypt');
+const flash = require('connect-flash');
+// const passport = require('passport');
+// const localStrategy = require('passport-local');
+
+// roster management routes
+// const rosmanagement = require('./routes/roster');
+// app.use('/rosmanagement', rosmanagement);
+
+const sessionOptions = { 
+    secret: 'notagoodsecret', 
+    resave: false, 
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 120,
+        maxAge: 1000 * 60 * 120
+    }
+}
 
 // connecting to database
 const dbUrl = process.env.DB_URL || 'mongodb+srv://admin:TriskelioN12@cluster0.o9j4k.mongodb.net/signals?retryWrites=true&w=majority';
@@ -19,6 +38,8 @@ mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 const Task = require('./models/tasks');
 const Roster = require('./models/roster');
 const { render } = require("ejs");
+const { route } = require("./routes/roster");
+const passport = require("passport");
 
 
 app.engine('ejs', ejsMate)
@@ -28,11 +49,30 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
-app.use(methodOverride('_method'));
+app.use(session(sessionOptions));
+app.use(flash());
+// app.use(passport.initialize());
+// app.use(passport.session);
+// passport.use(new localStrategy(Roster.authenticate()));
+// passport.serializeUser(Roster.serializeUser());
+// passport.deserializeUser(Roster.deserializeUser());
 
 
 app.get('/', (req, res) => {
     res.render('home');
+});
+
+//log in function
+
+app.post('/', async (req, res) => {
+    const { userName, password } = req.body
+    const user = await Roster.findOne({ userName });
+    const validpw = await bcrypt.compare(password, user.password)
+    if (validpw) {
+        res.render('agenthome');
+    } else {
+        res.send('Try again');
+    }
 });
 
 app.get('/agenthome', (req, res) => {
@@ -43,8 +83,7 @@ app.get('/adminhome', (req, res) => {
     res.render('adminhome');
 });
 
-
-//roster management
+// router management route
 
 app.get('/rostermanagement', async (req, res) => {
     const roster = await Roster.find({})
@@ -69,7 +108,7 @@ app.post('/rostermanagement', async (req, res) => {
         })
         await user.save()
             .then(() => {
-            res.redirect(`/rostermanagement`)
+            res.redirect('/rostermanagement')
         })
     } else {
         res.send(`Username ${req.body.userName} is already taken!`)
@@ -77,10 +116,11 @@ app.post('/rostermanagement', async (req, res) => {
     // res.render('rostermanagement', { roster });
 })
 
+//edit user
+
 app.get('/edituser', (req, res) => {
     res.render('rmedituser');
 })
-
 
 // Adding Task
 
@@ -126,3 +166,4 @@ const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`port is at ${port}`);
 });
+
