@@ -56,22 +56,36 @@ app.use(flash());
 // passport.deserializeUser(Roster.deserializeUser());
 
 
-app.get('/', (req, res) => {
-    res.render('home');
+app.get('/', async (req, res) => {
+    if (req.session.user_id) {
+        if (req.session.user_id.isActive) {
+            if (req.session.user_id.isAdmin) {
+                res.redirect('/adminhome')
+            } else {
+                res.render('agenthome');
+            }
+        } else {
+            res.render('home');
+        }
+    } else {
+        res.render('home');
+    }
 });
 
 //log in function
-
 app.post('/', async (req, res) => {
     const { userName, password } = req.body
     const user = await Roster.findOne({ userName });
     const validpw = await bcrypt.compare(password, user.password)
+    actUser = user
     if (validpw) {
         if (user.isActive) {
-            // res.cookie('name', user.userName);
-            req.session.user_id = user._id;
+            // res.cookie('isActive', user.isActive);
+            // res.cookie('user_id', user._id);
+            req.session.user_id = user.userName;
             if (user.isAdmin) {
-                res.render('adminhome')
+                // res.cookie('isAdmin', user.isAdmin);
+                res.redirect('/adminhome')
             } else {
                 res.render('agenthome')
             }
@@ -83,9 +97,17 @@ app.post('/', async (req, res) => {
     }
 });
 
-app.get('/agenthome', (req, res) => {
-    res.redirect('/');
-    res.render('agenthome');
+app.get('/agenthome', async (req, res) => {
+    const user = await Roster.findOne(req.session.user_id);
+    if (user.isActive) {
+        if (user.isAdmin) {
+            res.redirect('/adminhome')
+        } else {
+            res.render('agenthome');
+        }
+    } else {
+        res.redirect('/');
+    }
 });
 
 app.post('/logout', (req, res) => {
@@ -96,10 +118,11 @@ app.post('/logout', (req, res) => {
 // admin routes
 
 app.get('/adminhome', async (req, res) => {
-    if (req.session.user_id.isAdmin) {
-        res.render('adminhome');
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if (user.isActive && user.isAdmin) {
+        res.render('adminhome')
     } else {
-        res.redirect('/agenthome')
+        res.redirect('/')
     }
 });
 
