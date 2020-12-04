@@ -172,7 +172,7 @@ app.get('/adminhome', async (req, res) => {
         console.log(user)
         const npd = await Task.find({taskType: 'Non-Project Delivery'})
         const pd = await Task.find({taskType: 'Project Delivery'})
-        res.render('adminhome', { npd, pd, user, agentTasks, ongoingTasks, dur})
+        res.render('adminhome', { npd, pd, user, agentTasks, ongoingTasks})
     } else {
         res.redirect('/')
     }
