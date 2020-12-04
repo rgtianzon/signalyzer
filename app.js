@@ -7,6 +7,10 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const bcrypt = require('bcrypt');
 const flash = require('connect-flash');
+const moment = require('moment');
+const m = moment();
+const momenttz = require('moment-timezone');
+
 // const passport = require('passport');
 // const localStrategy = require('passport-local');
 
@@ -37,6 +41,7 @@ mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
 
 const Task = require('./models/tasks');
 const Roster = require('./models/roster');
+const Agenttask = require('./models/agenttasks');
 const passport = require("passport");
 
 
@@ -57,9 +62,11 @@ app.use(flash());
 
 
 app.get('/', async (req, res) => {
-    if (req.session.user_id) {
-        if (req.session.user_id.isActive) {
-            if (req.session.user_id.isAdmin) {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    console.log(user)
+    if (user) {
+        if (user.isActive) {
+            if (user.isAdmin) {
                 res.redirect('/adminhome')
             } else {
                 res.render('agenthome');
@@ -110,6 +117,33 @@ app.get('/agenthome', async (req, res) => {
     }
 });
 
+// agents adding tasks
+
+app.post('/addagenttask', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    let random = Math.floor(Math.random()*999999) + 100001
+    const agentTasksid = await Agenttask.findOne({taskID: random});
+    while (agentTasksid !== null) {
+        random = Math.floor(Math.random()*999999) + 100001
+        console.log(random)
+    }
+    const fn = user.firstName + " " + user.lastName
+    const Manila = momenttz.tz(m.toISOString(), "Asia/Manila");
+    console.log(req.body)
+    const AgentTask = new Agenttask({
+        taskID: random,
+        userName: user.userName,
+        fullName: fn,
+        taskName: req.body.taskName,
+        startDate: Manila.format('L LTS'),
+        onGoing: true
+    })
+    await AgentTask.save()
+        .then(() => {
+            res.redirect('/');
+        })
+})
+
 app.post('/logout', (req, res) => {
     req.session.user_id = null;
     res.redirect('/');
@@ -119,8 +153,26 @@ app.post('/logout', (req, res) => {
 
 app.get('/adminhome', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
+    const agentTasks = await Agenttask.find({userName: req.session.user_id}).sort({created_at: -1});
+    const ongoingTasks = await Agenttask.find({userName: req.session.user_id, onGoing: true}).sort({created_at: -1});
+    //duration start
+    // var startTime = new Date(agentTasks.startDate).getTime();
+
+    // var dur = setInterval(function () {
+    //     const Manila = momenttz.tz(m.toISOString(), "Asia/Manila");
+    //     var now = new Date(Manila).getTime();
+    //     var distance = now - startTime;
+    //     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    //     var duration = hours + 'h ' + minutes + 'm ' + seconds + 's '
+    // }, 1000);
+    //duration end
     if (user.isActive && user.isAdmin) {
-        res.render('adminhome')
+        console.log(user)
+        const npd = await Task.find({taskType: 'Non-Project Delivery'})
+        const pd = await Task.find({taskType: 'Project Delivery'})
+        res.render('adminhome', { npd, pd, user, agentTasks, ongoingTasks, dur})
     } else {
         res.redirect('/')
     }
@@ -132,6 +184,8 @@ app.get('/rostermanagement', async (req, res) => {
     const roster = await Roster.find({})
     res.render('rostermanagement', { roster });
 })
+
+// adding user
 
 app.post('/rostermanagement', async (req, res) => {
     const roster = await Roster.find({})
