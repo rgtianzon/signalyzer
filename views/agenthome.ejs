@@ -6,17 +6,214 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <title>Document</title>
+    <title>Agent Home</title>
     <style>
         body {
             text-align: center;
         }
+        .container {
+            /* width: 500px; */
+            padding: 10px;
+        }
+        .item {
+            width: 100px;
+            padding: 10px;
+            display: inline-block;
+            vertical-align: middle
+        }
+        .navbar {
+            margin-bottom: 10px;
+        }
+
+        #npdf {
+            margin-bottom: 10px;
+            border: 1px solid lightgray;
+            padding: 10px;
+            background-color: rgb(182, 212, 182);
+            border-radius: 20px;
+        }
+
+        #pdf {
+            margin-bottom: 10px;
+            border: 1px solid lightgray;
+            padding: 10px;
+            background-color: rgb(182, 212, 182);
+            border-radius: 20px;
+        }
+
+        #lgo {
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            text-align: center;
+        }
+
+        #welcome {
+            color: white;
+        }
     </style>
 </head>
 <body>
-    <h1>Agent Home</h1>
-    <form action="/logout" method="POST">
-        <button>Log Out</button>
-    </form>
+    <!-- navbar start -->
+    <div class="pos-f-t">
+        <div class="collapse" id="navbarToggleExternalContent">
+          <div class="bg-dark p-4">
+              <div class="container">
+                        <div class="item">
+                            <a href="/agenthome" class="btn btn-outline-info">Home</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
+                            <form action="/logout" method="POST" id="lgo">
+                                <button class="btn btn-outline-danger"><strong>Logout</strong></button>
+                            </form>
+                        </div>
+              </div>
+          </div>
+        </div>
+        <nav class="navbar navbar-dark bg-dark">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h3 id="welcome">Welcome, <%=user.firstName%>!</h3>
+        </nav>
+    </div>
+    <!-- navbar end -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- non project delivery form -->
+                <form action="/addagenttask" method="POST" novalidate class="validated-form" id="npdf">
+                    <p><strong>Non Project Delivery</strong></p>
+                    <div class="form-group">
+                        <select name="taskName" class="form-control" required>
+                            <option value="">Select Non Project Delivery Tasks Here</option>
+                        <% for (let np of npd) { %>
+                            <option value="<%=np.taskName%>"><%=np.taskName%></option>
+                        <% } %>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn btn-success">START</button>
+                    </div>
+                </form>
+                <!-- project delivery form -->
+                <form action="/addagenttask" method="POST" novalidate class="validated-form" id="pdf">
+                    <p><strong>Project Delivery</strong></p>
+                    <div class="form-group">
+                        <select name="taskName" class="form-control" required>
+                            <option value="">Select Project Delivery Tasks Here</option>
+                        <% for (let p of pd) { %>
+                            <option value="<%=p.taskName%>"><%=p.taskName%></option>
+                        <% } %>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn btn-success">START</button>
+                    </div>
+                </form>
+            </div>
+            <!-- on going tasks table -->
+            <div class="col-md-8">
+                <h4>On Going Tasks</h4>
+                <table class="table">
+                    <thead>
+                      <tr class="table-danger">
+                        <th scope="col">Task ID</th>
+                        <th scope="col">Task Name</th>
+                        <th scope="col">Start</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let at of ongoingTasks) { %>
+                            <tr class="table-danger">
+                                <td><%= at.taskID %></td>
+                                <td><%= at.taskName %></td>
+                                <td><%= at.startDate %></td>
+                                <td><button class="btn btn-danger" data-toggle="modal" data-target="#<%= at.userName %><%= at.taskID %>">END</button></td>
+                            </tr>
+
+                            <div class="modal fade" id="<%= at.userName %><%= at.taskID %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel"><%= at.taskName %></h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form action="/agenttaskput?_method=PUT" method="POST">
+                                            <div class="form-group">
+                                                <textarea name="comments" placeholder="Comments for <%= at.taskName %>" class="form-control"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="taskID" class="form-control" value="<%= at.taskID %>" hidden></input>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-danger">END</button>
+                                            </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                        <% } %>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <p><strong>History</strong></p>
+            <table class="table">
+                <tr class="table-info">
+                    <th scope="col">Task ID</th>
+                    <th scope="col">Task Name</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">End</th>
+                    <th scope="col">Duration</th>
+                </tr>
+                <tbody>
+                    <% for (let et of endedTasks) { %>
+                        <tr class="table-info">
+                            <td><%= et.taskID %></td>
+                            <td><%= et.taskName %></td>
+                            <td><%= et.startDate %></td>
+                            <td><%= et.endDate %></td>
+                            <td><%= et.durationTime %></td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <script>
+        function str() {
+            document.getElementById("nptask").submit();
+        }
+
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.validated-form')
+
+            // Loop over them and prevent submission
+            Array.from(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 </body>
 </html>

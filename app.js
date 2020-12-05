@@ -67,9 +67,9 @@ app.get('/', async (req, res) => {
     if (user) {
         if (user.isActive) {
             if (user.isAdmin) {
-                res.redirect('/adminhome')
+                res.redirect('/adminhome');
             } else {
-                res.render('agenthome');
+                res.redirect('/agenthome');
             }
         } else {
             res.render('home');
@@ -80,21 +80,18 @@ app.get('/', async (req, res) => {
 });
 
 //log in function
-app.post('/', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { userName, password } = req.body
-    const user = await Roster.findOne({ userName });
-    const validpw = await bcrypt.compare(password, user.password)
-    actUser = user
-    if (validpw) {
-        if (user.isActive) {
-            // res.cookie('isActive', user.isActive);
-            // res.cookie('user_id', user._id);
-            req.session.user_id = user.userName;
-            if (user.isAdmin) {
-                // res.cookie('isAdmin', user.isAdmin);
+    const user = await Roster.find({ userName: userName });
+    actUser = user[0]
+    const validpw = await bcrypt.compare(password, actUser.password)
+    if(validpw){
+        if (actUser.isActive) {
+            req.session.user_id = actUser.userName;
+            if (actUser.isAdmin) {
                 res.redirect('/adminhome')
             } else {
-                res.render('agenthome')
+                res.redirect('/agenthome')
             }
         } else {
             res.render('home')
@@ -105,12 +102,17 @@ app.post('/', async (req, res) => {
 });
 
 app.get('/agenthome', async (req, res) => {
-    const user = await Roster.findOne(req.session.user_id);
+    const user = await Roster.findOne({userName: req.session.user_id});
+    const agentTasks = await Agenttask.find({userName: req.session.user_id}).sort({created_at: -1});
+    const ongoingTasks = await Agenttask.find({userName: req.session.user_id, onGoing: true}).sort({created_at: -1});
+    const endedTasks = await Agenttask.find({userName: req.session.user_id, onGoing: false}).sort({created_at: -1});
     if (user.isActive) {
         if (user.isAdmin) {
             res.redirect('/adminhome')
         } else {
-            res.render('agenthome');
+            const npd = await Task.find({taskType: 'Non-Project Delivery'})
+            const pd = await Task.find({taskType: 'Project Delivery'})
+            res.render('agenthome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks})
         }
     } else {
         res.redirect('/');
