@@ -31,7 +31,7 @@ const sessionOptions = {
 
 // connecting to database
 const dbUrl = process.env.DB_URL || 'mongodb+srv://admin:TriskelioN12@cluster0.o9j4k.mongodb.net/signals?retryWrites=true&w=majority';
-mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(dbUrl, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
     .then(() => {
         console.log('connection open!');
     })
@@ -43,6 +43,7 @@ const Task = require('./models/tasks');
 const Roster = require('./models/roster');
 const Agenttask = require('./models/agenttasks');
 const passport = require("passport");
+const { request } = require("http");
 
 
 app.engine('ejs', ejsMate)
@@ -63,7 +64,6 @@ app.use(flash());
 
 app.get('/', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
-    console.log(user)
     if (user) {
         if (user.isActive) {
             if (user.isAdmin) {
@@ -128,8 +128,7 @@ app.post('/addagenttask', async (req, res) => {
         console.log(random)
     }
     const fn = user.firstName + " " + user.lastName
-    const Manila = momenttz.tz(m.toISOString(), "Asia/Manila");
-    console.log(req.body)
+    let Manila = momenttz.tz(new Date(), "Asia/Manila");
     const AgentTask = new Agenttask({
         taskID: random,
         userName: user.userName,
@@ -144,6 +143,44 @@ app.post('/addagenttask', async (req, res) => {
         })
 })
 
+// agents update tasks
+
+app.put('/agenttaskput', async (req, res) => {
+    const tid = req.body.taskID;
+    const coms = req.body.comments;
+    const user = await Roster.findOne({userName: req.session.user_id});
+    // duration start
+
+    const endtak = momenttz.tz(new Date(), "Asia/Manila");
+    const endDate = endtak.format('L LTS')
+    const aTask = await Agenttask.findOne({taskID: tid});
+    const taskStart = new Date(aTask.startDate).getTime();
+    const taskEnd = new Date(endDate).getTime();
+    const distance = taskEnd - taskStart;
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const durationTime = hours + 'h ' + minutes + 'm ' + seconds + 's'
+
+    // duration end
+    const filter = { taskID: tid };
+    const update = { 
+        onGoing: false,
+        endDate,
+        durationTime,
+        durationHr: hours,
+        durationMn: minutes,
+        durationSc: seconds,
+        comments: coms,
+        UpdatedBy: user.userName
+    };
+    await Agenttask.findOneAndUpdate(filter, update);
+    // console.log(req.body.taskID);
+    // Agenttask.findByIdAndUpdate()
+    // console.log(id)
+    res.redirect('/')
+})
+
 app.post('/logout', (req, res) => {
     req.session.user_id = null;
     res.redirect('/');
@@ -155,24 +192,11 @@ app.get('/adminhome', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     const agentTasks = await Agenttask.find({userName: req.session.user_id}).sort({created_at: -1});
     const ongoingTasks = await Agenttask.find({userName: req.session.user_id, onGoing: true}).sort({created_at: -1});
-    //duration start
-    // var startTime = new Date(agentTasks.startDate).getTime();
-
-    // var dur = setInterval(function () {
-    //     const Manila = momenttz.tz(m.toISOString(), "Asia/Manila");
-    //     var now = new Date(Manila).getTime();
-    //     var distance = now - startTime;
-    //     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    //     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    //     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    //     var duration = hours + 'h ' + minutes + 'm ' + seconds + 's '
-    // }, 1000);
-    //duration end
+    const endedTasks = await Agenttask.find({userName: req.session.user_id, onGoing: false}).sort({created_at: -1});
     if (user.isActive && user.isAdmin) {
-        console.log(user)
         const npd = await Task.find({taskType: 'Non-Project Delivery'})
         const pd = await Task.find({taskType: 'Project Delivery'})
-        res.render('adminhome', { npd, pd, user, agentTasks, ongoingTasks})
+        res.render('adminhome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks})
     } else {
         res.redirect('/')
     }
@@ -210,7 +234,6 @@ app.post('/rostermanagement', async (req, res) => {
     } else {
         res.send(`Username ${req.body.userName} is already taken!`)
     }
-    // res.render('rostermanagement', { roster });
 })
 
 //edit user

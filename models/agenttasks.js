@@ -7,11 +7,13 @@ const agenttaskSchema = new mongoose.Schema({
     taskName: String,
     startDate: String,
     endDate: String,
-    durationTime: Number,
+    durationTime: String,
     durationHr: Number,
     durationMn: Number,
     durationSc: Number,
-    onGoing: Boolean
+    onGoing: Boolean,
+    comments: String,
+    UpdatedBy: String
 
 }, { timestamps: { createdAt: 'created_at' } });
 
