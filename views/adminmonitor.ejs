@@ -99,28 +99,10 @@
         <div class="row">
             <div class="col-md-12">
                 <!-- On going task -->
-                <table class="table" id="ongoingtable">
-                    <thead>
-                        <tr class="table-danger">
-                            <th scope="col">Task ID</th>
-                            <th scope="col">Agent Name</th>
-                            <th scope="col">Task Name</th>
-                            <th scope="col">Start</th>
-                            <th scope="col">Duration</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% for (let at of ongoingTasks) { %>
-                            <tr class="table-danger ong">
-                                <td><%= at.taskID %></td>
-                                <td><%= at.fullName %></td>
-                                <td><%= at.taskName %></td>
-                                <td class="ongtime"><%= at.startDate %></td>
-                                <td class="runtime"></td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
+                <iframe src="/adminmonitor2" height="500" width="100%" title="description"></iframe>
+            </div>
+            <div class="col-md-12">
+
             </div>
         </div>
     </div>
