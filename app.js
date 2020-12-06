@@ -239,31 +239,50 @@ app.get('/adminhome', async (req, res) => {
 
 app.get('/adminpwreset', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
-    res.render('adminpwreset', {user, msg: req.flash(), err: req.flash()});
+    if (user.isActive && user.isAdmin) {
+        const user = await Roster.findOne({userName: req.session.user_id});
+        res.render('adminpwreset', {user, msg: req.flash(), err: req.flash()});
+    } else {
+        res.redirect('/')
+    }
 });
 
 app.put('/adminpwreset', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
-    const uname = user.userName;
-    const pw = req.body.password;
-    const cpw = req.body.confirmpw;
-    const hash = await bcrypt.hash(pw, 12);
-    if (pw===cpw) {
-        const filter = {userName: uname}
-        const update = {
-            password: hash,
+    if (user.isActive && user.isAdmin) {
+        const uname = user.userName;
+        const pw = req.body.password;
+        const cpw = req.body.confirmpw;
+        const hash = await bcrypt.hash(pw, 12);
+        if (pw===cpw) {
+            const filter = {userName: uname}
+            const update = {
+                password: hash,
         }
-        await Roster.findOneAndUpdate(filter, update);
-        req.flash('success','Password Changed')
-        res.render('adminpwreset', {user, msg: req.flash('success'), err: req.flash()});
-    } else if (pw!==cpw) {
-        console.log(false)
-        req.flash('error','Confirm Password did not match')
-        res.render('adminpwreset', {user, err: req.flash('error'), msg: req.flash()});
+            await Roster.findOneAndUpdate(filter, update);
+            req.flash('success','Password Changed')
+            res.render('adminpwreset', {user, msg: req.flash('success'), err: req.flash()});
+        } else if (pw!==cpw) {
+            console.log(false)
+            req.flash('error','Confirm Password did not match')
+            res.render('adminpwreset', {user, err: req.flash('error'), msg: req.flash()});
+        }
+    } else {
+        res.redirect('/')
     }
-    console.log(user)
-    console.log(req.body)
 })
+
+app.get('/adminmonitor', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if(user.isActive && user.isAdmin) {
+        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({created_at: -1});
+        const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
+        res.render('adminmonitor', { user, ongoingTasks, endedTasks });
+    } else {
+        res.redirect('/')
+    }
+    
+});
 
 // router management
 
