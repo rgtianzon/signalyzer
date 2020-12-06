@@ -204,6 +204,11 @@ app.get('/adminhome', async (req, res) => {
     }
 });
 
+app.get('/adminpwreset', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    res.render('adminpwreset', {user})
+});
+
 // router management route
 
 app.get('/rostermanagement', async (req, res) => {

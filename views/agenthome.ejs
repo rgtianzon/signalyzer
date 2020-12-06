@@ -123,6 +123,7 @@
                         <th scope="col">Task ID</th>
                         <th scope="col">Task Name</th>
                         <th scope="col">Start</th>
+                        <th scope="col">Duration</th>
                         <th scope="col"></th>
                       </tr>
                     </thead>
@@ -131,7 +132,8 @@
                             <tr class="table-danger">
                                 <td><%= at.taskID %></td>
                                 <td><%= at.taskName %></td>
-                                <td><%= at.startDate %></td>
+                                <td class="ongtime"><%= at.startDate %></td>
+                                <td class="runtime"></td>
                                 <td><button class="btn btn-danger" data-toggle="modal" data-target="#<%= at.userName %><%= at.taskID %>">END</button></td>
                             </tr>
 
@@ -214,6 +216,24 @@
                     }, false)
                 })
         })()
+        function convertTZ(date, tzString) {
+            return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+        }
+
+        let stime = document.querySelectorAll('.ongtime');
+        let runtime = document.querySelectorAll('.runtime');
+        setInterval(function() {
+            for (i=0; i<stime.length; i++) {
+            let actime = stime[i].innerHTML
+            let start = new Date(actime).getTime()
+            let now = convertTZ(new Date(), "Asia/Manila")
+            let distance = now - start;
+            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            runtime[i].innerHTML=hours + "h " + minutes + "m " + seconds + "s"
+            }
+        }, 1000)
     </script>
 </body>
 </html>
