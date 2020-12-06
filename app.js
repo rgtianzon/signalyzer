@@ -272,12 +272,25 @@ app.put('/adminpwreset', async (req, res) => {
     }
 })
 
+// admin monitor
+
 app.get('/adminmonitor', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
         const ongoingTasks = await Agenttask.find({onGoing: true}).sort({created_at: -1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
         res.render('adminmonitor', { user, ongoingTasks, endedTasks });
+    } else {
+        res.redirect('/')
+    }
+    
+});
+
+app.get('/adminmonitor2', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if(user.isActive && user.isAdmin) {
+        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({created_at: -1});
+        res.render('adminmonitor2', { user, ongoingTasks});
     } else {
         res.redirect('/')
     }
