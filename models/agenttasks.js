@@ -5,6 +5,7 @@ const agenttaskSchema = new mongoose.Schema({
     userName: String,
     fullName: String,
     taskName: String,
+    taskType: String,
     startDate: String,
     endDate: String,
     durationTime: String,

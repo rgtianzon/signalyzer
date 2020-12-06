@@ -110,8 +110,8 @@ app.get('/agenthome', async (req, res) => {
         if (user.isAdmin) {
             res.redirect('/adminhome')
         } else {
-            const npd = await Task.find({taskType: 'Non-Project Delivery'})
-            const pd = await Task.find({taskType: 'Project Delivery'})
+            const npd = await Task.find({taskType: 'Non-Project Delivery'}).sort({taskName: 1});
+            const pd = await Task.find({taskType: 'Project Delivery'}).sort({taskName: 1});
             res.render('agenthome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks})
         }
     } else {
@@ -119,15 +119,45 @@ app.get('/agenthome', async (req, res) => {
     }
 });
 
+
+// agent  password reset
+app.get('/agentpwreset', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    res.render('agentpwreset', {user, msg: req.flash(), err: req.flash()});
+});
+
+app.put('/agentpwreset', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    const uname = user.userName;
+    const pw = req.body.password;
+    const cpw = req.body.confirmpw;
+    const hash = await bcrypt.hash(pw, 12);
+    if (pw===cpw) {
+        const filter = {userName: uname}
+        const update = {
+            password: hash,
+        }
+        await Roster.findOneAndUpdate(filter, update);
+        req.flash('success','Password Changed')
+        res.render('agentpwreset', {user, msg: req.flash('success'), err: req.flash()});
+    } else if (pw!==cpw) {
+        console.log(false)
+        req.flash('error','Confirm Password did not match')
+        res.render('agentpwreset', {user, err: req.flash('error'), msg: req.flash()});
+    }
+    console.log(user)
+    console.log(req.body)
+})
+
 // agents adding tasks
 
 app.post('/addagenttask', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
+    const tasktype = await Task.findOne({taskName: req.body.taskName});
     let random = Math.floor(Math.random()*999999) + 100001
     const agentTasksid = await Agenttask.findOne({taskID: random});
     while (agentTasksid !== null) {
         random = Math.floor(Math.random()*999999) + 100001
-        console.log(random)
     }
     const fn = user.firstName + " " + user.lastName
     let Manila = momenttz.tz(new Date(), "Asia/Manila");
@@ -136,6 +166,7 @@ app.post('/addagenttask', async (req, res) => {
         userName: user.userName,
         fullName: fn,
         taskName: req.body.taskName,
+        taskType: tasktype.taskType,
         startDate: Manila.format('L LTS'),
         onGoing: true
     })
@@ -196,20 +227,45 @@ app.get('/adminhome', async (req, res) => {
     const ongoingTasks = await Agenttask.find({userName: req.session.user_id, onGoing: true}).sort({created_at: -1});
     const endedTasks = await Agenttask.find({userName: req.session.user_id, onGoing: false}).sort({created_at: -1});
     if (user.isActive && user.isAdmin) {
-        const npd = await Task.find({taskType: 'Non-Project Delivery'})
-        const pd = await Task.find({taskType: 'Project Delivery'})
+        const npd = await Task.find({taskType: 'Non-Project Delivery'}).sort({taskName: 1});
+        const pd = await Task.find({taskType: 'Project Delivery'}).sort({taskName: 1});
         res.render('adminhome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks})
     } else {
         res.redirect('/')
     }
 });
 
+// admin password reset
+
 app.get('/adminpwreset', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
-    res.render('adminpwreset', {user})
+    res.render('adminpwreset', {user, msg: req.flash(), err: req.flash()});
 });
 
-// router management route
+app.put('/adminpwreset', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    const uname = user.userName;
+    const pw = req.body.password;
+    const cpw = req.body.confirmpw;
+    const hash = await bcrypt.hash(pw, 12);
+    if (pw===cpw) {
+        const filter = {userName: uname}
+        const update = {
+            password: hash,
+        }
+        await Roster.findOneAndUpdate(filter, update);
+        req.flash('success','Password Changed')
+        res.render('adminpwreset', {user, msg: req.flash('success'), err: req.flash()});
+    } else if (pw!==cpw) {
+        console.log(false)
+        req.flash('error','Confirm Password did not match')
+        res.render('adminpwreset', {user, err: req.flash('error'), msg: req.flash()});
+    }
+    console.log(user)
+    console.log(req.body)
+})
+
+// router management
 
 app.get('/rostermanagement', async (req, res) => {
     const roster = await Roster.find({})

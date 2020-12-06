@@ -54,11 +54,11 @@
           <div class="bg-dark p-4">
               <div class="container">
                         <div class="item">
-                            <a href="/adminhome" class="btn btn-outline-info">Home</a>
+                            <a href="/agenthome" class="btn btn-outline-info">Home</a>
                             <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
                         </div>
                         <div class="item">
-                            <a href="/adminpwreset" class="btn btn-outline-info">Reset Password</a>
+                            <a href="/agentpwreset" class="btn btn-outline-info">Reset Password</a>
                             <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
                         </div>
                         <div class="item">
@@ -73,7 +73,7 @@
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <h3 id="welcome">Welcome, <%= user.firstName %>!</h3>
+          <h3 id="welcome">Welcome, <%=user.firstName%>!</h3>
         </nav>
     </div>
     <!-- navbar end -->
@@ -90,7 +90,7 @@
                 <strong>ERROR: </strong><%= err %>
             </div>
         <% } %>
-        <form action="/adminpwreset?_method=PUT" method="POST" novalidate class="validated-form">
+        <form action="/agentpwreset?_method=PUT" method="POST" novalidate class="validated-form">
             <div class="form-group">
                 <input name="password" type="password" class="form-control" placeholder="Create new password" required></input>
             </div>
