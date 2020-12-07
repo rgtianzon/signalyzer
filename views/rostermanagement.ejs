@@ -99,7 +99,6 @@
         </nav>
     </div>
     <!-- navbar end -->
-    <h1>Add User Page</h1>
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-sm-4"></div>
@@ -130,13 +129,68 @@
         </div>
         <div class="row">
             <div class="col-md-12 col-sm-12">
-                <table>
-                    <tr>
+                <table class="table">
+                    <tr class="table-info">
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Fullname</th>
                         <th></th>
                     </tr>
-                    <tr>
-                        <td></td>
-                    </tr>
+                    <tbody>
+                        <% for(let ros of roster) { %>
+                            <tr class="table-info">
+                                <td><%= ros.sigID %></td>
+                                <td><%= ros.userName %></td>
+                                <td><%= ros.firstName %> <%= ros.lastName %></td>
+                                <td><button class="btn btn-warning" data-toggle="modal" data-target="#<%= ros.userName %><%= ros.sigID %>">Details</button></td>
+                            </tr>
+                            <div class="modal fade" id="<%= ros.userName %><%= ros.sigID %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel"><%= ros.firstName %> <%= ros.lastName %></h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form action="/rostermanagement?_method=PUT" method="POST">
+                                            <div class="form-group">
+                                                <input name="userName" class="form-control" value="<%= ros.userName %>" hidden></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="firstName" class="form-control" value="<%= ros.firstName %>"></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="lastName" class="form-control" value="<%= ros.lastName %>"></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="password" name="password" id="password" placeholder="Password" class="form-control" value="<%= ros.password %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="isActive">Set Active</label>
+                                                <input type="checkbox" id="isActive" name="isActive" value="true" 
+                                                <% if(ros.isActive) { %>
+                                                    checked
+                                                <% } %>
+                                                >
+                                                <label for="isAdmin">Set Admin</label>
+                                                <input type="checkbox" id="isAdmin" name="isAdmin" value="true"
+                                                <% if(ros.isAdmin) { %>
+                                                    checked
+                                                <% } %>
+                                                >
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-warning">Update User</button>
+                                            </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    </tbody>
                 </table>
             </div>
         </div>

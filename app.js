@@ -348,7 +348,7 @@ app.get('/adminmonitor2', async (req, res) => {
 
 app.get('/rostermanagement', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
-    const roster = await Roster.find({})
+    const roster = await Roster.find({}).sort({created_at: -1})
     if (user.isActive && user.isAdmin) {
         res.render('rostermanagement', { roster, user })
     } else {
@@ -383,11 +383,31 @@ app.post('/rostermanagement', async (req, res) => {
     }
 })
 
+app.put('/rostermanagement', async (req, res) => {
+    const uname = req.body.userName
+    const fname = req.body.firstName
+    const lname = req.body.lastName
+    const pw = req.body.password
+    const isActive = req.body.isActive
+    const isAdmin = req.body.isAdmin
+    const hash = await bcrypt.hash(pw, 12);
+    const filter = {userName: uname}
+    const update = {
+        firstName: fname,
+        lastName: lname,
+        password: hash,
+        isActive: isActive,
+        isAdmin: isAdmin
+    }
+    await Roster.findOneAndUpdate(filter, update);
+    res.redirect('/rostermanagement')
+})
+
 //edit user
 
-app.get('/edituser', (req, res) => {
-    res.render('rmedituser');
-})
+// app.get('/edituser', (req, res) => {
+//     res.render('rmedituser');
+// })
 
 // Adding Task
 
