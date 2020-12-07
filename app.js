@@ -55,6 +55,16 @@ app.use(methodOverride('_method'));
 
 app.use(session(sessionOptions));
 app.use(flash());
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    if(req.method==='OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH')
+        return res.status(200).json({});
+    }
+    next();
+})
 // app.use(passport.initialize());
 // app.use(passport.session);
 // passport.use(new localStrategy(Roster.authenticate()));
@@ -457,7 +467,7 @@ app.delete('/managetask/:id', async (req, res) => {
 
 app.get('/signalyzer/api', async (req, res) => {
     const data = await Agenttask.find({})
-    res.send(data);
+    res.send(data)
 })
 
 const port = process.env.PORT || 5000;
