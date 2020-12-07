@@ -11,16 +11,94 @@
         body {
             text-align: center;
         }
-        div {
-            padding: 5px;
+        .container {
+            padding: 10px;
         }
-        .hid {
-            display: none;
+        .item {
+            width: 100px;
+            padding: 10px;
+            display: inline-block;
+            vertical-align: middle
+        }
+        .navbar {
+            margin-bottom: 10px;
+        }
+
+        #npdf {
+            margin-bottom: 10px;
+            border: 1px solid lightgray;
+            padding: 10px;
+            background-color: rgb(182, 212, 182);
+            border-radius: 20px;
+        }
+
+        #pdf {
+            margin-bottom: 10px;
+            border: 1px solid lightgray;
+            padding: 10px;
+            background-color: rgb(182, 212, 182);
+            border-radius: 20px;
+        }
+
+        #lgo {
+            margin-bottom: 0;
+        }
+
+        .col-md-4 {
+            text-align: center;
+        }
+
+        #welcome {
+            color: white;
+        }
+
+        .item {
+            width: auto;
         }
     </style>
-
 </head>
 <body>
+    <!-- navbar start -->
+    <div class="pos-f-t">
+        <div class="collapse" id="navbarToggleExternalContent">
+          <div class="bg-dark p-4">
+              <div class="container">
+                        <div class="item">
+                            <a href="/adminhome" class="btn btn-outline-info">Home</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
+                            <a href="/adminpwreset" class="btn btn-outline-info">Reset Password</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
+                            <a href="/adminmonitor" class="btn btn-outline-info">Monitor</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
+                            <a href="/rostermanagement" class="btn btn-outline-info">Roster</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
+                            <a href="/managetask" class="btn btn-outline-info">Manage Tasks</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
+                            <form action="/logout" method="POST" id="lgo">
+                                <button class="btn btn-outline-danger"><strong>Logout</strong></button>
+                            </form>
+                        </div>
+              </div>
+          </div>
+        </div>
+        <nav class="navbar navbar-dark bg-dark">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h3 id="welcome">Welcome, <%= user.firstName %>!</h3>
+        </nav>
+    </div>
+    <!-- navbar end -->
     <h1>Add User Page</h1>
     <div class="container">
         <div class="row">

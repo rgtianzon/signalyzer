@@ -80,6 +80,14 @@
                             <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
                         </div>
                         <div class="item">
+                            <a href="/rostermanagement" class="btn btn-outline-info">Roster</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
+                            <a href="/managetask" class="btn btn-outline-info">Manage Tasks</a>
+                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
+                        </div>
+                        <div class="item">
                             <form action="/logout" method="POST" id="lgo">
                                 <button class="btn btn-outline-danger"><strong>Logout</strong></button>
                             </form>
@@ -105,6 +113,8 @@
             </div>
             <div>
                 <!-- Tasks history -->
+                <hr>
+                <p>Overall Tasks History</p>
                 <table class="table">
                     <thead>
                         <tr class="table-info">
@@ -128,8 +138,54 @@
                                 <td><%= et.startDate %></td>
                                 <td><%= et.endDate %></td>
                                 <td><%= et.durationTime %></td>
-                                <td><button class="btn btn-warning">OverRide</button></td>
+                                <td><button class="btn btn-warning" data-toggle="modal" data-target="#<%= et.userName %><%= et.taskID %>">OverRide</button></td>
                             </tr>
+                            <div class="modal fade" id="<%= et.userName %><%= et.taskID %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel"><%= et.fullName %>: <%= et.taskName %></h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form action="/adminmonitor?_method=PUT" method="POST">
+                                            <div class="form-group">
+                                                <input name="taskID" class="form-control" value="<%= et.taskID %>" hidden></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="userName" class="form-control" value="<%= et.userName %>" hidden></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="fullName" class="form-control" value="<%= et.fullName %>" disabled></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <select name="taskName" class="form-control">
+                                                    <option value="<%= et.taskName %>"><%= et.taskName %></option>
+                                                    <% for (let ts of tsk) { %>
+                                                    <option value="<%= ts.taskName %>"><%= ts.taskName %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                            <p>Comments: <%= et.comments %></p>
+                                            <div class="form-group">
+                                                <input name="startDate" class="form-control" value="<%= et.startDate %>"></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <input name="endDate" class="form-control" value="<%= et.endDate %>"></input>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea name="comments" placeholder="Comments for <%= et.fullName %>: <%= et.taskName %>" class="form-control"></textarea>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-warning">OverRide</button>
+                                            </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
                         <% } %>
                     </tbody>
                 </table>

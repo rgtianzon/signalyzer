@@ -277,13 +277,58 @@ app.put('/adminpwreset', async (req, res) => {
 app.get('/adminmonitor', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
+        const tsk = await Task.find({}).sort({taskName: 1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
         const agents = await Roster.find({});
-        res.render('adminmonitor', { user, endedTasks, agents });
+        res.render('adminmonitor', { user, endedTasks, agents, tsk });
     } else {
         res.redirect('/')
     }
     
+});
+
+// task override
+
+app.put('/adminmonitor', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if(user.isActive && user.isAdmin) {
+        const tid = req.body.taskID;
+        const coms = req.body.comments;
+        const newstartDate = req.body.startDate;
+        const newendDate = req.body.endDate;
+        const tasktype = await Task.findOne({taskName: req.body.taskName});
+        // duration start
+
+        const taskStart = new Date(newstartDate).getTime();
+        const taskEnd = new Date(newendDate).getTime();
+        const distance = taskEnd - taskStart;
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        const durationTime = hours + 'h ' + minutes + 'm ' + seconds + 's'
+
+        // duration end
+        const filter = { taskID: tid };
+
+        const update = { 
+            taskName: req.body.taskName,
+            taskType: tasktype.taskType,
+            startDate: newstartDate,
+            endDate: newendDate,
+            durationTime: durationTime,
+            durationHr: hours,
+            durationMn: minutes,
+            durationSc: seconds,
+            comments: coms,
+            UpdatedBy: user.userName
+        };
+        await Agenttask.findOneAndUpdate(filter, update);
+        res.redirect('/adminmonitor')
+        console.log('adminmonitor put route')
+        console.log(req.body)
+    } else {
+        res.redirect('/')
+    }
 });
 
 //admin monitor that renders a frame
@@ -302,8 +347,13 @@ app.get('/adminmonitor2', async (req, res) => {
 // router management
 
 app.get('/rostermanagement', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
     const roster = await Roster.find({})
-    res.render('rostermanagement', { roster });
+    if (user.isActive && user.isAdmin) {
+        res.render('rostermanagement', { roster, user })
+    } else {
+        res.redirect('/')
+    }
 })
 
 // adding user
@@ -342,9 +392,14 @@ app.get('/edituser', (req, res) => {
 // Adding Task
 
 app.get('/managetask', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
     const task = await Task.find({}).sort({created_at: -1})
-    req.body.taskID = task[0].taskID + 1;
-    res.render('managetask', { task });
+    if (user.isActive && user.isAdmin) {
+        req.body.taskID = task[0].taskID + 1;
+        res.render('managetask', { task, user });
+    } else {
+        res.redirect('/')
+    }
 })
 
 app.post('/managetask', async (req, res) => {
