@@ -277,19 +277,21 @@ app.put('/adminpwreset', async (req, res) => {
 app.get('/adminmonitor', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
-        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({created_at: -1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
-        res.render('adminmonitor', { user, ongoingTasks, endedTasks });
+        const agents = await Roster.find({});
+        res.render('adminmonitor', { user, endedTasks, agents });
     } else {
         res.redirect('/')
     }
     
 });
 
+//admin monitor that renders a frame
+
 app.get('/adminmonitor2', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
-        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({created_at: -1});
+        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({fullName: 1, created_at: -1});
         res.render('adminmonitor2', { user, ongoingTasks});
     } else {
         res.redirect('/')

@@ -97,35 +97,44 @@
     <!-- navbar end -->
     <div class="container">
         <div class="row">
+            <div class="col-md-3">
+            </div>
             <div class="col-md-12">
                 <!-- On going task -->
                 <iframe src="/adminmonitor2" height="500" width="100%" title="description"></iframe>
             </div>
-            <div class="col-md-12">
-
+            <div>
+                <!-- Tasks history -->
+                <table class="table">
+                    <thead>
+                        <tr class="table-info">
+                            <th>Task ID</th>
+                            <th>Full Name</th>
+                            <th>Task Name</th>
+                            <th>Task Type</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Duration</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for ( let et of endedTasks) { %>
+                            <tr class="table-info">
+                                <td><%= et.taskID %></td>
+                                <td><%= et.fullName %></td>
+                                <td><%= et.taskName %></td>
+                                <td><%= et.taskType %></td>
+                                <td><%= et.startDate %></td>
+                                <td><%= et.endDate %></td>
+                                <td><%= et.durationTime %></td>
+                                <td><button class="btn btn-warning">OverRide</button></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <script>
-        function convertTZ(date, tzString) {
-            return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
-        }
-
-        let stime = document.querySelectorAll('.ongtime');
-        let runtime = document.querySelectorAll('.runtime');
-        let ongoingtable = document.getElementById('ongoingtable');
-        setInterval(function() {
-            for (i=0; i<stime.length; i++) {
-                let actime = stime[i].innerHTML
-                let start = new Date(actime).getTime()
-                let now = convertTZ(new Date(), "Asia/Manila")
-                let distance = now - start;
-                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                runtime[i].innerHTML=hours + "h " + minutes + "m " + seconds + "s"
-            }
-        }, 1000)
-    </script>
 </body>
 </html>
