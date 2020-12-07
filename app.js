@@ -453,6 +453,12 @@ app.delete('/managetask/:id', async (req, res) => {
     res.redirect('/managetask');
 });
 
+//API
+
+app.get('/signalyzer/api', async (req, res) => {
+    const data = await Agenttask.find({})
+    res.send(data);
+})
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
