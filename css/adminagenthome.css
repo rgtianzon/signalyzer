@@ -1,0 +1,93 @@
+    body {
+        background: linear-gradient(to right,#36d1dc,#5b86e5);
+        font-family: Poppins;
+        text-align: center;
+        color: white;
+        }
+    hr {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 2px solid white;
+    }
+    .container {
+        padding: 10px;
+        margin-top: 20px;
+        background-color: transparent;
+        width: 100%;
+        border-radius: 10px;
+    }
+    .item {
+        width: 100px;
+        padding: 10px;
+        display: inline-block;
+        vertical-align: middle
+    }
+    .navbar {
+        margin-bottom: 0px;
+    }
+    .btn-outline-info {
+        color: white;
+        border: 2px solid white;
+        font-weight: bold;
+    }
+    #npdf {
+        margin-bottom: 10px;
+       /* border: 2px solid white;*/
+        padding: 30px;
+        border-radius: 20px;
+        background:  rgb(2, 132, 155);
+    }
+
+    #pdf {
+        margin-bottom: 10px;
+       /* border: 2px solid white;*/
+        padding: 30px;
+        border-radius: 20px;
+        background:  rgb(2, 132, 155);
+    }
+    #btnstart{
+        width: 60%;
+        border-style: solid;
+        margin: 10px;
+        border-radius: 10px;
+        font-weight: 500;
+    }
+
+    #lgo {
+        margin-bottom: 0;
+    }
+
+    .col-md-4 {
+        text-align: center;
+    }
+
+    #welcome {
+        color: white;
+    }
+
+    .item {
+        width: auto;
+    }
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: white;
+    }
+    .table-danger, .table-danger>td, .table-danger>th {
+        background-color: transparent;
+        border: 2px solid white;
+    }
+    .table-info, .table-info>td, .table-info>th {
+        background-color: transparent;
+        border: 2px solid white;
+    }
+    #oghead {
+    background: rgb(2, 132, 155);
+    }
+    #exampleModalLabel{
+        color: darkslategrey;
+    }
+    .text-white { 
+        padding: 10px;
+    }

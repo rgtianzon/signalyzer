@@ -1,0 +1,38 @@
+body {
+    background: linear-gradient(to right,#36d1dc,#5b86e5);
+    font-family: Poppins;
+    text-align: center;
+    color: white;
+}
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: white;
+    vertical-align: middle;
+}
+.table-danger, .table-danger>td, .table-danger>th {
+    background-color: transparent;
+    border: 2px solid white;
+}
+.table-info, .table-info>td, .table-info>th {
+    background-color: transparent;
+    border: 2px solid white;
+}
+#btnstart{
+    width: 80%;
+    border-style: solid;
+    border-radius: 10px;
+    font-weight: 500;
+}
+#adetails {
+    color: #8cff9d;
+}
+#oghead {
+background: rgb(2, 132, 155);
+}
+#exampleModalLabel{
+    color: darkslategrey;
+}
+#welcome {
+    color: white;
+}
