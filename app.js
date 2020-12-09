@@ -55,6 +55,16 @@ app.use(methodOverride('_method'));
 
 app.use(session(sessionOptions));
 app.use(flash());
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    if(req.method==='OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH')
+        return res.status(200).json({});
+    }
+    next();
+})
 // app.use(passport.initialize());
 // app.use(passport.session);
 // passport.use(new localStrategy(Roster.authenticate()));
@@ -272,12 +282,72 @@ app.put('/adminpwreset', async (req, res) => {
     }
 })
 
+// admin monitor
+
 app.get('/adminmonitor', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
-        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({created_at: -1});
+        const tsk = await Task.find({}).sort({taskName: 1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
-        res.render('adminmonitor', { user, ongoingTasks, endedTasks });
+        const agents = await Roster.find({});
+        res.render('adminmonitor', { user, endedTasks, agents, tsk });
+    } else {
+        res.redirect('/')
+    }
+    
+});
+
+// task override
+
+app.put('/adminmonitor', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if(user.isActive && user.isAdmin) {
+        const tid = req.body.taskID;
+        const coms = req.body.comments;
+        const newstartDate = req.body.startDate;
+        const newendDate = req.body.endDate;
+        const tasktype = await Task.findOne({taskName: req.body.taskName});
+        // duration start
+
+        const taskStart = new Date(newstartDate).getTime();
+        const taskEnd = new Date(newendDate).getTime();
+        const distance = taskEnd - taskStart;
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        const durationTime = hours + 'h ' + minutes + 'm ' + seconds + 's'
+
+        // duration end
+        const filter = { taskID: tid };
+
+        const update = { 
+            taskName: req.body.taskName,
+            taskType: tasktype.taskType,
+            startDate: newstartDate,
+            endDate: newendDate,
+            durationTime: durationTime,
+            durationHr: hours,
+            durationMn: minutes,
+            durationSc: seconds,
+            comments: coms,
+            UpdatedBy: user.userName
+        };
+        await Agenttask.findOneAndUpdate(filter, update);
+        res.redirect('/adminmonitor')
+        console.log('adminmonitor put route')
+        console.log(req.body)
+    } else {
+        res.redirect('/')
+    }
+});
+
+//admin monitor that renders a frame
+
+app.get('/adminmonitor2', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if(user.isActive && user.isAdmin) {
+        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({fullName: 1, created_at: -1});
+        res.render('adminmonitor2', { user, ongoingTasks});
     } else {
         res.redirect('/')
     }
@@ -287,8 +357,13 @@ app.get('/adminmonitor', async (req, res) => {
 // router management
 
 app.get('/rostermanagement', async (req, res) => {
-    const roster = await Roster.find({})
-    res.render('rostermanagement', { roster });
+    const user = await Roster.findOne({userName: req.session.user_id});
+    const roster = await Roster.find({}).sort({created_at: -1})
+    if (user.isActive && user.isAdmin) {
+        res.render('rostermanagement', { roster, user })
+    } else {
+        res.redirect('/')
+    }
 })
 
 // adding user
@@ -318,18 +393,43 @@ app.post('/rostermanagement', async (req, res) => {
     }
 })
 
+app.put('/rostermanagement', async (req, res) => {
+    const uname = req.body.userName
+    const fname = req.body.firstName
+    const lname = req.body.lastName
+    const pw = req.body.password
+    const isActive = req.body.isActive
+    const isAdmin = req.body.isAdmin
+    const hash = await bcrypt.hash(pw, 12);
+    const filter = {userName: uname}
+    const update = {
+        firstName: fname,
+        lastName: lname,
+        password: hash,
+        isActive: isActive,
+        isAdmin: isAdmin
+    }
+    await Roster.findOneAndUpdate(filter, update);
+    res.redirect('/rostermanagement')
+})
+
 //edit user
 
-app.get('/edituser', (req, res) => {
-    res.render('rmedituser');
-})
+// app.get('/edituser', (req, res) => {
+//     res.render('rmedituser');
+// })
 
 // Adding Task
 
 app.get('/managetask', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
     const task = await Task.find({}).sort({created_at: -1})
-    req.body.taskID = task[0].taskID + 1;
-    res.render('managetask', { task });
+    if (user.isActive && user.isAdmin) {
+        req.body.taskID = task[0].taskID + 1;
+        res.render('managetask', { task, user });
+    } else {
+        res.redirect('/')
+    }
 })
 
 app.post('/managetask', async (req, res) => {
@@ -363,6 +463,12 @@ app.delete('/managetask/:id', async (req, res) => {
     res.redirect('/managetask');
 });
 
+//API
+
+app.get('/signalyzer/api', async (req, res) => {
+    const data = await Agenttask.find({})
+    res.send(data)
+})
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

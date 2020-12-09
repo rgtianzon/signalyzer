@@ -1,19 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-   
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    <title>Signalyzer v2.0</title>
-    <style>
-        /*login */
+/*login */
 #bodylogin {
     background: linear-gradient(to right,#36d1dc,#5b86e5);
      text-align: center;
@@ -172,28 +157,3 @@ background: rgb(2, 132, 155);
     color: #8cff9d;
 }
 
-
-    </style>
-</head>
-<body id="bodylogin">
-    <div class="login-box">
- <!--       <div class="row">
-            <div class="col-md-4 col-sm-4"></div>
-            <div class="col-md-4 col-sm-4">-->
-                <h1>SIGN IN</h1>
-                <p>Hello! Sign in now to your Signalyzer account</p>
-                <form action="/login" method="POST">
-                    <div>
-                        <Input name="userName" type="text" placeholder="USERNAME" id="fuser"></Input>
-                    </div>
-                    <div>
-                        <Input name="password" type="password" placeholder="PASSWORD" id="fpass"></Input>
-                    </div>
-                    <button class="btn btn-success" id="btnlogin">SIGN IN NOW</button>
-                </form>
-            <!--</div>
-            <div class="col-md-4 col-sm-4"></div>
-        </div>-->
-    </div>
-</body>
-</html>

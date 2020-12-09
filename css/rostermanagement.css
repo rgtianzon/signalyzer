@@ -1,0 +1,158 @@
+/*login */
+#bodylogin {
+background: linear-gradient(to right,#36d1dc,#5b86e5);
+ text-align: center;
+ color: white;
+ font-family: Poppins;
+ padding: 100px;
+}
+/*div {
+ padding: 5px;
+}*/
+#btnlogin{
+ width: 80%;
+ border: transparent;
+ margin: 10px;
+ padding: 10px 20px 10px 20px;
+ border-radius: 5px;
+ font-weight: 500;
+}
+#fuser{
+ width: 80%;
+ padding: 10px 20px 10px 20px;
+ border-radius: 5px;
+ border-style: hidden;
+}
+#fpass{
+ width: 80%;
+ padding: 10px 20px 10px 20px;
+ border-radius: 5px;
+ border-style: hidden;
+}
+.login-box {
+ /*background: #2f6e5f91;*/
+ width: 380px;
+ height: 420px;
+ border-radius: 10px;
+ background: rgb(2, 132, 155);
+ color: #fff;
+ top: 45%;
+ left: 50%;
+ position: absolute;
+ transform: translate(-50%,-50%);
+ box-sizing: border-box;
+ padding: 50px 50px;
+/* monitor */    
+}
+.item {
+width: 100px;
+padding: 10px;
+display: inline-block;
+vertical-align: middle
+}
+#welcome {
+color: white;
+}
+
+.item {
+width: auto;
+}
+.table-danger, .table-danger>td, .table-danger>th {
+background-color: transparent;
+border: 2px solid white;
+}
+/* pwreset */  
+#passbox {
+width: auto;
+height: auto;
+border-radius: 10px;
+background:  rgb(2, 132, 155);
+color: #fff;
+top: 45%;
+left: 50%;
+position: absolute;
+transform: translate(-50%,-50%);
+box-sizing: border-box;
+padding: 50px;
+}
+/* home */
+body {
+background: linear-gradient(to right,#36d1dc,#5b86e5);
+font-family: Poppins;
+text-align: center;
+color: white;
+}
+hr {
+margin-top: 1rem;
+margin-bottom: 1rem;
+border: 0;
+border-top: 2px solid white;
+}
+.container {
+padding: 10px;
+margin-top: 20px;
+background-color: transparent;
+width: 100%;
+border-radius: 10px;
+}
+.navbar {
+margin-bottom: 0px;
+}
+.btn-outline-info {
+color: white;
+border: 2px solid white;
+font-weight: bold;
+}
+#npdf {
+margin-bottom: 10px;
+/* border: 2px solid white;*/
+padding: 30px;
+border-radius: 20px;
+background:  rgb(2, 132, 155);
+}
+
+#pdf {
+margin-bottom: 10px;
+/* border: 2px solid white;*/
+padding: 30px;
+border-radius: 20px;
+background:  rgb(2, 132, 155);
+}
+#btnstart{
+width: 60%;
+border-style: solid;
+margin: 10px;
+border-radius: 10px;
+font-weight: 500;
+}
+
+#lgo {
+margin-bottom: 0;
+}
+
+.col-md-4 {
+text-align: center;
+}
+.table-info, .table-info>td, .table-info>th {
+background-color: transparent;
+border: 2px solid white;
+}
+#oghead {
+background: rgb(2, 132, 155);
+}
+#exampleModalLabel{
+color: darkslategrey;
+}
+/* roster */
+.table {
+width: 100%;
+margin-bottom: 1rem;
+color: white;
+}
+.hid {
+display: none;
+}
+/* manage task */
+#adetails {
+color: #8cff9d;
+}
