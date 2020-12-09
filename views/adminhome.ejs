@@ -109,6 +109,7 @@
                     <div class="form-group">
                         <select name="taskName" class="form-control" required>
                             <option value="">Select Non Project Delivery Tasks Here</option>
+                            <option value="Shift">Shift</option>
                         <% for (let np of npd) { %>
                             <option value="<%=np.taskName%>"><%=np.taskName%></option>
                         <% } %>
