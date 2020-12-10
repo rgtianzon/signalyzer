@@ -12,98 +12,208 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <title>Add User</title>
     <style>
-        body {
-            text-align: center;
-        }
-        .container {
+/*login */
+#bodylogin {
+    background: linear-gradient(to right,#36d1dc,#5b86e5);
+     text-align: center;
+     color: white;
+     font-family: Poppins;
+     padding: 100px;
+ }
+ /*div {
+     padding: 5px;
+ }*/
+ #btnlogin{
+     width: 80%;
+     border: transparent;
+     margin: 10px;
+     padding: 10px 20px 10px 20px;
+     border-radius: 5px;
+     font-weight: 500;
+ }
+ #fuser{
+     width: 80%;
+     padding: 10px 20px 10px 20px;
+     border-radius: 5px;
+     border-style: hidden;
+ }
+ #fpass{
+     width: 80%;
+     padding: 10px 20px 10px 20px;
+     border-radius: 5px;
+     border-style: hidden;
+ }
+ .login-box {
+     /*background: #2f6e5f91;*/
+     width: 380px;
+     height: 420px;
+     border-radius: 10px;
+     background: rgb(2, 132, 155);
+     color: #fff;
+     top: 45%;
+     left: 50%;
+     position: absolute;
+     transform: translate(-50%,-50%);
+     box-sizing: border-box;
+     padding: 50px 50px;
+ /* monitor */    
+ }
+.item {
+    width: 100px;
+    padding: 10px;
+    display: inline-block;
+    vertical-align: middle
+}
+#welcome {
+    color: white;
+}
+
+.item {
+    width: auto;
+}
+.table-danger, .table-danger>td, .table-danger>th {
+    background-color: transparent;
+    border: 2px solid white;
+}
+ /* pwreset */  
+#passbox {
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+    background:  rgb(2, 132, 155);
+    color: #fff;
+    top: 45%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 50px;
+}
+ /* home */
+body {
+    background: linear-gradient(to right,#36d1dc,#5b86e5);
+    font-family: Poppins;
+    text-align: center;
+    color: white;
+    }
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 2px solid white;
+}
+.container {
+    padding: 10px;
+    margin-top: 20px;
+    background-color: transparent;
+    width: 100%;
+    border-radius: 10px;
+}
+.navbar {
+    margin-bottom: 0px;
+}
+.btn-outline-info {
+    color: white;
+    border: 2px solid white;
+    font-weight: bold;
+}
+#npdf {
+    margin-bottom: 10px;
+   /* border: 2px solid white;*/
+    padding: 30px;
+    border-radius: 20px;
+    background:  rgb(2, 132, 155);
+}
+
+#pdf {
+    margin-bottom: 10px;
+   /* border: 2px solid white;*/
+    padding: 30px;
+    border-radius: 20px;
+    background:  rgb(2, 132, 155);
+}
+#btnstart{
+    width: 60%;
+    border-style: solid;
+    margin: 10px;
+    border-radius: 10px;
+    font-weight: 500;
+}
+
+#lgo {
+    margin-bottom: 0;
+}
+
+.col-md-4 {
+    text-align: center;
+}
+.table-info, .table-info>td, .table-info>th {
+    background-color: transparent;
+    border: 2px solid white;
+}
+#oghead {
+background: rgb(2, 132, 155);
+}
+#exampleModalLabel{
+    color: darkslategrey;
+}
+/* roster */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: white;
+}
+.hid {
+    display: none;
+}
+/* manage task */
+#adetails {
+    color: #8cff9d;
+}
+
+
+.text-white { 
             padding: 10px;
         }
-        .item {
-            width: 100px;
-            padding: 10px;
-            display: inline-block;
-            vertical-align: middle
+label[for=isActive], label[for=isAdmin]{
+            color: darkslategrey;
         }
-        .navbar {
-            margin-bottom: 10px;
-        }
-
-        #npdf {
-            margin-bottom: 10px;
-            border: 1px solid lightgray;
-            padding: 10px;
-            background-color: rgb(182, 212, 182);
-            border-radius: 20px;
-        }
-
-        #pdf {
-            margin-bottom: 10px;
-            border: 1px solid lightgray;
-            padding: 10px;
-            background-color: rgb(182, 212, 182);
-            border-radius: 20px;
-        }
-
-        #lgo {
-            margin-bottom: 0;
-        }
-
-        .col-md-4 {
-            text-align: center;
-        }
-
-        #welcome {
-            color: white;
-        }
-
-        .item {
-            width: auto;
-        }
-    </style>
+</style>
 </head>
 <body>
     <!-- navbar start -->
     <div class="pos-f-t">
-        <div class="collapse" id="navbarToggleExternalContent">
-          <div class="bg-dark p-4">
-              <div class="container">
-                        <div class="item">
-                            <a href="/adminhome" class="btn btn-outline-info">Home</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/adminpwreset" class="btn btn-outline-info">Reset Password</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/adminmonitor" class="btn btn-outline-info">Monitor</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/rostermanagement" class="btn btn-outline-info">Roster</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/managetask" class="btn btn-outline-info">Manage Tasks</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <form action="/logout" method="POST" id="lgo">
-                                <button class="btn btn-outline-danger"><strong>Logout</strong></button>
-                            </form>
-                        </div>
-              </div>
+      <!--new nav start-->
+      <nav class="navbar navbar-light bg-dark">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
           </div>
+          <ul class="nav justify-content-end">
+              <li class="nav-item">
+                <a class="text-white" href="/adminhome">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/adminmonitor">Monitor</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/rostermanagement">Roster</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/managetask">Manage Tasks</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/adminpwreset">Reset Password</a>
+              </li>
+              <form action="/logout" method="POST" id="lgo">
+                <button class="btn btn-danger btn-sm"><strong>Logout</strong></button>
+              </form>
+          </ul>
         </div>
-        <nav class="navbar navbar-dark bg-dark">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <h3 id="welcome">Welcome, <%= user.firstName %>!</h3>
-        </nav>
-    </div>
-    <!-- navbar end -->
-    <div class="container">
+      </nav>
+      <!--new nav end-->
+
+ <div class="container">   
         <div class="row">
             <div class="col-md-4 col-sm-4"></div>
             <div class="col-md-4 col-sm-4">
@@ -127,19 +237,20 @@
                         <label for="isAdmin">Set Admin</label>
                         <input type="checkbox" id="isAdmin" name="isAdmin" value="true">
                     </div>
-                    <button class="btn btn-primary mb-2">ADD USER</button>
+                    <button class="btn btn-success mb-2">ADD USER</button>
                 </form>
             </div>
             <div class="col-md-4 col-sm-4"></div>
         </div>
+        <hr>
         <div class="row">
             <div class="col-md-12 col-sm-12">
                 <table class="table">
-                    <tr class="table-info">
+                    <tr class="table-info" id="oghead">
                         <th>User ID</th>
                         <th>Username</th>
                         <th>Fullname</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                     <tbody>
                         <% for(let ros of roster) { %>

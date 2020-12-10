@@ -18,6 +18,9 @@
             text-align: center;
             color: white;
         }
+        p{
+            color: darkslategrey;
+        }
         hr {
             margin-top: 1rem;
             margin-bottom: 1rem;
@@ -107,8 +110,7 @@
 <body>
     <!-- navbar start -->
     <div class="pos-f-t">
-      <!--new nav start-->
-      <nav class="navbar navbar-inverse">
+      <nav class="navbar navbar-light bg-dark">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
@@ -140,10 +142,60 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
+                <input type="text" id="myInput" onkeyup="myfil()" placeholder="Search for names.." title="Type in a name">
             </div>
             <div class="col-md-12">
-                <!-- On going task -->
-                
+                <!-- ongoing tasks -->
+                <p><strong>Real Time Tasks</strong></p>
+                <table class="table" id="ongoingtable">
+                    <tr>
+                        <th>Task ID</th>
+                        <th>Name</th>
+                        <th>Task Name</th>
+                        <th>Start</th>
+                        <th>Duration</th>
+                        <th></th>
+                    </tr>
+                    <% for(let ot of ongoingTasks){ %>
+                        <tr class="ongTasks">
+                            <td><%= ot.taskID %></td>
+                            <td><%= ot.fullName %></td>
+                            <td><%= ot.taskName %></td>
+                            <td class="ongtime"><%= ot.startDate %></td>
+                            <td class="runtime"></td>
+                            <td><button class="btn btn-danger" data-toggle="modal" data-target="#<%= ot.userName %><%= ot.taskID %>">END</button></td>
+                        </tr>
+                        <div class="modal fade" id="<%= ot.userName %><%= ot.taskID %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel"><%= ot.taskName %></h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="/agenttaskput?_method=PUT" method="POST">
+                                        <div class="form-group">
+                                            <textarea name="comments" placeholder="Comments for <%= ot.taskName %>" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <input name="taskID" class="form-control" value="<%= ot.taskID %>" hidden></input>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-danger">END</button>
+                                        </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    <% } %>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <!-- ended tasks -->
+                <p><strong>History</strong></p>
                 <table class="table" id="ongoingtable">
                     <thead id="oghead">
                         <tr class="table-danger">
@@ -154,6 +206,7 @@
                             <th scope="col">Start</th>
                             <th scope="col">End</th>
                             <th scope="col">Duration</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -220,5 +273,68 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function convertTZ(date, tzString) {
+            return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
+        }
+
+        let stime = document.querySelectorAll('.ongtime');
+        let runtime = document.querySelectorAll('.runtime');
+        setInterval(function() {
+            for (i=0; i<stime.length; i++) {
+            let actime = stime[i].innerHTML
+            let start = new Date(actime).getTime()
+            let now = convertTZ(new Date(), "Asia/Manila")
+            let distance = now - start;
+            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            runtime[i].innerHTML=hours + "h " + minutes + "m " + seconds + "s"
+            }
+        }, 1000)
+
+        setInterval(function reqong(){
+            fetch('https://signalyzer.herokuapp.com/signalyzer/api')
+             .then((res)=>{
+                return res.json()
+             })
+             .then((data)=>{
+                let onGoing = data.filter((task)=>{
+                return task.onGoing == true
+                })
+                let crlen = document.querySelectorAll('.ongtime')
+                let curlen = crlen.length
+                let newlen = onGoing.length
+                // console.log(`current: ${curlen}`)
+                // console.log(`new: ${newlen}`)
+                if(curlen != newlen){
+                    location.reload()
+                }
+             })
+             .then(()=>{
+             })
+        }, 3000)
+
+        function myfil() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("ongoingtable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    txtValue = td.textContent || td.innerText || td.innerHTML;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }       
+            }
+        }
+    </script>
 </body>
 </html>

@@ -109,35 +109,35 @@
 <body>
         <!-- navbar start -->
     <div class="pos-f-t">
-            <!--new nav start-->
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                  <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
-                </div>
-                <ul class="nav justify-content-end">
-                    <li class="nav-item">
-                      <a class="text-white" href="/adminhome">Home</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="text-white" href="/adminmonitor">Monitor</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="text-white" href="/rostermanagement">Roster</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="text-white" href="/managetask">Manage Tasks</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="text-white" href="/adminpwreset">Reset Password</a>
-                    </li>
-                    <form action="/logout" method="POST" id="lgo">
-                      <button class="btn btn-danger btn-sm"><strong>Logout</strong></button>
-                    </form>
-                </ul>
-              </div>
-        </nav>
-    </div>
+      <!--new nav start-->
+      <nav class="navbar navbar-light bg-dark">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
+          </div>
+          <ul class="nav justify-content-end">
+              <li class="nav-item">
+                <a class="text-white" href="/adminhome">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/adminmonitor">Monitor</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/rostermanagement">Roster</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/managetask">Manage Tasks</a>
+              </li>
+              <li class="nav-item">
+                <a class="text-white" href="/adminpwreset">Reset Password</a>
+              </li>
+              <form action="/logout" method="POST" id="lgo">
+                <button class="btn btn-danger btn-sm"><strong>Logout</strong></button>
+              </form>
+          </ul>
+        </div>
+      </nav>
+      <!--new nav end-->
     <div class="container">
         <div class="row">
             <div class="col-md-4">
@@ -184,7 +184,7 @@
                         <th scope="col">Task Name</th>
                         <th scope="col">Start</th>
                         <th scope="col">Duration</th>
-                        <th scope="col"></th>
+                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -229,8 +229,7 @@
         </div>
         <hr>
         <div>
-            <!-- Tasks history -->
-            <p><strong>History</strong></p>
+            <h3>History</h3>
             <table class="table">
                 <tr class="table-info" id="oghead">
                     <th scope="col">Task ID</th>
