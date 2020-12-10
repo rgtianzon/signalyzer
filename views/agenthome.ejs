@@ -114,19 +114,10 @@
           </div>
           <ul class="nav justify-content-end">
               <li class="nav-item">
-                <a class="text-white" href="/adminhome">Home</a>
+                <a class="text-white" href="/agenthome">Home</a>
               </li>
               <li class="nav-item">
-                <a class="text-white" href="/adminmonitor">Monitor</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/rostermanagement">Roster</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/managetask">Manage Tasks</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/adminpwreset">Reset Password</a>
+                <a class="text-white" href="/agentpwreset">Reset Password</a>
               </li>
               <form action="/logout" method="POST" id="lgo">
                 <button class="btn btn-danger btn-sm"><strong>Logout</strong></button>
@@ -145,6 +136,7 @@
                     <div class="form-group">
                         <select name="taskName" class="form-control" required>
                             <option value="">Select Non Project Delivery Tasks Here</option>
+                            <option value="Shift">Shift</option>
                         <% for (let np of npd) { %>
                             <option value="<%=np.taskName%>"><%=np.taskName%></option>
                         <% } %>
