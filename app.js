@@ -291,12 +291,52 @@ app.get('/adminmonitor', async (req, res) => {
         const ongoingTasks = await Agenttask.find({onGoing: true}).sort({userName: 1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
         const agents = await Roster.find({});
-        res.render('adminmonitor', { user, endedTasks, agents, tsk, ongoingTasks });
+        const results = endedTasks.slice(0, 20)
+        const pages = endedTasks.length / 20
+        let p = []
+        for (i=1; i<pages; i++){
+            p.push([i])
+        }
+        res.render('adminmonitor', { user, endedTasks, agents, tsk, ongoingTasks, endedTasks, results, p });
     } else {
         res.redirect('/')
     }
-    
 });
+
+app.get('/paginate/:page', async(req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if(user.isActive && user.isAdmin) {
+        const tsk = await Task.find({}).sort({taskName: 1});
+        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({userName: 1});
+        const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
+        const agents = await Roster.find({});
+        const { page } = req.params
+        const limit = 20
+        const startIndex = (page-1) * limit
+        const endIndex = page * limit
+        const pages = endedTasks.length / limit
+        let p = []
+        for (i=1; i<pages; i++){
+            p.push([i])
+        }
+        let results = endedTasks.slice(startIndex, endIndex)
+        if (endIndex < endedTasks.length) {
+            results.next = {
+                page: page + 1,
+                limit: limit
+            }
+        }
+        if (startIndex > 0){
+            results.prev = {
+                page: page - 1,
+                limit: limit
+            }
+        }
+        res.render('adminmonitor', { user, endedTasks, agents, tsk, ongoingTasks, endedTasks, results, p});
+    } else {
+        res.redirect('/')
+    }
+})
 
 // task override
 

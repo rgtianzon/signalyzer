@@ -211,7 +211,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% for ( let et of endedTasks) { %>
+                        <% for ( let et of results) { %>
                             <tr class="table-info">
                                 <td><%= et.taskID %></td>
                                 <td><%= et.fullName %></td>
@@ -271,6 +271,13 @@
                         <% } %>
                     </tbody>
                 </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <% for (let page of p){ %>
+                            <li class="page-item"><a class="page-link" href="/paginate/<%= page %>"><%= page %></a></li>
+                        <% } %>
+                    </ul>
+                  </nav>
             </div>
         </div>
     </div>
