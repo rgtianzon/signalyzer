@@ -43,20 +43,19 @@
      border-style: hidden;
  }
  .login-box {
-     /*background: #2f6e5f91;*/
-     width: 380px;
-     height: 420px;
-     border-radius: 10px;
-     background: rgb(2, 132, 155);
-     color: #fff;
-     top: 45%;
-     left: 50%;
-     position: absolute;
-     transform: translate(-50%,-50%);
-     box-sizing: border-box;
-     padding: 50px 50px;
- /* monitor */    
- }
+    /*background: #2f6e5f91;*/
+            width: 380px;
+            height: 420px;
+            border-radius: 10px;
+            background: rgb(2, 132, 155);
+            color: #fff;
+            top: 45%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%,-50%);
+            box-sizing: border-box;
+            padding: 50px 50px;
+        }
 .item {
     width: 100px;
     padding: 10px;
@@ -75,19 +74,7 @@
     border: 2px solid white;
 }
  /* pwreset */  
-#passbox {
-    width: auto;
-    height: auto;
-    border-radius: 10px;
-    background:  rgb(2, 132, 155);
-    color: #fff;
-    top: 45%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%,-50%);
-    box-sizing: border-box;
-    padding: 50px;
-}
+
  /* home */
 body {
     background: linear-gradient(to right,#36d1dc,#5b86e5);
@@ -179,36 +166,27 @@ background: rgb(2, 132, 155);
 <body>
     <!-- navbar start -->
     <div class="pos-f-t">
-      <!--new nav start-->
-      <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
+        <!--new nav start-->
+        <nav class="navbar navbar-light bg-dark">
+            <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/agenthome" id="welcome">Welcome, <%= user.firstName %>!</a>
+            </div>
+            <ul class="nav justify-content-end">
+                <li class="nav-item">
+                  <a class="text-white" href="/agenthome">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="text-white" href="/agentpwreset">Reset Password</a>
+                </li>
+                <form action="/logout" method="POST" id="lgo">
+                  <button class="btn btn-danger btn-sm"><strong>Logout</strong></button>
+                </form>
+            </ul>
           </div>
-          <ul class="nav justify-content-end">
-              <li class="nav-item">
-                <a class="text-white" href="/adminhome">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/adminmonitor">Monitor</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/rostermanagement">Roster</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/managetask">Manage Tasks</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/adminpwreset">Reset Password</a>
-              </li>
-              <form action="/logout" method="POST" id="lgo">
-                <button class="btn btn-danger btn-sm"><strong>Logout</strong></button>
-              </form>
-          </ul>
-        </div>
-      </nav>
-      <!--new nav end-->
-    <div class="login-box" id="passbox">
+        </nav>
+        <!--new nav end-->
+      <div class="login-box" id="passbox">
         <h5>Fullname: <%= user.firstName%> <%= user.lastName%></h5>
         <h5>Username: <%= user.userName%></h5>
         <% if (msg && msg.length) { %>

@@ -18,6 +18,9 @@
             text-align: center;
             color: white;
         }
+        p{
+            color: darkslategrey;
+        }
         hr {
             margin-top: 1rem;
             margin-bottom: 1rem;
@@ -107,43 +110,11 @@
 <body>
     <!-- navbar start -->
     <div class="pos-f-t">
-<<<<<<< HEAD
       <!--new nav start-->
-      <nav class="navbar navbar-inverse">
+      <nav class="navbar navbar-light bg-dark">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
-=======
-        <div class="collapse" id="navbarToggleExternalContent">
-          <div class="bg-dark p-4">
-              <div class="container">
-                        <div class="item">
-                            <a href="/adminhome" class="btn btn-outline-info">Home</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/adminpwreset" class="btn btn-outline-info">Reset Password</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/adminmonitor" class="btn btn-outline-info">Monitor</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/rostermanagement" class="btn btn-outline-info">Roster</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/managetask" class="btn btn-outline-info">Manage Tasks</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <form action="/logout" method="POST" id="lgo">
-                                <button class="btn btn-outline-danger"><strong>Logout</strong></button>
-                            </form>
-                        </div>
-              </div>
->>>>>>> b14fc795d175c7e7783112011e826719bf896771
           </div>
           <ul class="nav justify-content-end">
               <li class="nav-item">
@@ -174,35 +145,17 @@
             </div>
             <div class="col-md-12">
                 <!-- On going task -->
-<<<<<<< HEAD
                 <table class="table" id="ongoingtable">
                     <thead id="oghead">
                         <tr class="table-danger">
                             <th scope="col">Task ID</th>
                             <th scope="col">Agent Name</th>
                             <th scope="col">Task Name</th>
+                            <th scope="col">Task Type</th>
                             <th scope="col">Start</th>
+                            <th scope="col">End</th>
                             <th scope="col">Duration</th>
-                            <th scope="col"></th>
-=======
-                <iframe src="/adminmonitor2" height="500" width="100%" title="description"></iframe>
-            </div>
-            <div>
-                <!-- Tasks history -->
-                <hr>
-                <p>Overall Tasks History</p>
-                <table class="table">
-                    <thead>
-                        <tr class="table-info">
-                            <th>Task ID</th>
-                            <th>Full Name</th>
-                            <th>Task Name</th>
-                            <th>Task Type</th>
-                            <th>Start</th>
-                            <th>End</th>
-                            <th>Duration</th>
-                            <th></th>
->>>>>>> b14fc795d175c7e7783112011e826719bf896771
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -109,43 +109,11 @@
 <body>
     <!-- navbar start -->
     <div class="pos-f-t">
-<<<<<<< HEAD
       <!--new nav start-->
-      <nav class="navbar navbar-inverse">
+      <nav class="navbar navbar-light bg-dark">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
-=======
-        <div class="collapse" id="navbarToggleExternalContent">
-          <div class="bg-dark p-4">
-              <div class="container">
-                        <div class="item">
-                            <a href="/adminhome" class="btn btn-outline-info">Home</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/adminpwreset" class="btn btn-outline-info">Reset Password</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/adminmonitor" class="btn btn-outline-info">Monitor</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/rostermanagement" class="btn btn-outline-info">Roster</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <a href="/managetask" class="btn btn-outline-info">Manage Tasks</a>
-                            <!-- <button type="button" class="btn btn-outline-info">HOME</button> -->
-                        </div>
-                        <div class="item">
-                            <form action="/logout" method="POST" id="lgo">
-                                <button class="btn btn-outline-danger"><strong>Logout</strong></button>
-                            </form>
-                        </div>
-              </div>
->>>>>>> b14fc795d175c7e7783112011e826719bf896771
           </div>
           <ul class="nav justify-content-end">
               <li class="nav-item">
@@ -180,6 +148,7 @@
                     <div class="form-group">
                         <select name="taskName" class="form-control" required>
                             <option value="">Select Non Project Delivery Tasks Here</option>
+                            <option value="Shift">Shift</option>
                         <% for (let np of npd) { %>
                             <option value="<%=np.taskName%>"><%=np.taskName%></option>
                         <% } %>
@@ -215,7 +184,7 @@
                         <th scope="col">Task Name</th>
                         <th scope="col">Start</th>
                         <th scope="col">Duration</th>
-                        <th scope="col"></th>
+                        <th scope="col">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -260,12 +229,7 @@
         </div>
         <hr>
         <div>
-<<<<<<< HEAD
             <h3>History</h3>
-=======
-            <!-- Tasks history -->
-            <p><strong>History</strong></p>
->>>>>>> b14fc795d175c7e7783112011e826719bf896771
             <table class="table">
                 <tr class="table-info" id="oghead">
                     <th scope="col">Task ID</th>

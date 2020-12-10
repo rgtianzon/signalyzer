@@ -16,7 +16,7 @@
             font-family: Poppins;
             text-align: center;
             color: white;
-        }
+            }
         hr {
             margin-top: 1rem;
             margin-bottom: 1rem;
@@ -26,6 +26,7 @@
         .container {
             padding: 10px;
             margin-top: 20px;
+            background-color: transparent;
             width: 100%;
             border-radius: 10px;
         }
@@ -44,6 +45,7 @@
             font-weight: bold;
         }
         #npdf {
+            margin-bottom: 10px;
            /* border: 2px solid white;*/
             padding: 30px;
             border-radius: 20px;
@@ -51,6 +53,7 @@
         }
 
         #pdf {
+            margin-bottom: 10px;
            /* border: 2px solid white;*/
             padding: 30px;
             border-radius: 20px;
@@ -93,7 +96,7 @@
             border: 2px solid white;
         }
         #oghead {
-            background: rgb(2, 132, 155);
+        background: rgb(2, 132, 155);
         }
         #exampleModalLabel{
             color: darkslategrey;
@@ -107,26 +110,17 @@
     <!-- navbar start -->
     <div class="pos-f-t">
       <!--new nav start-->
-      <nav class="navbar navbar-inverse">
+      <nav class="navbar navbar-light bg-dark">
         <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
+            <a class="navbar-brand" href="/agenthome" id="welcome">Welcome, <%= user.firstName %>!</a>
           </div>
           <ul class="nav justify-content-end">
               <li class="nav-item">
-                <a class="text-white" href="/adminhome">Home</a>
+                <a class="text-white" href="/agenthome">Home</a>
               </li>
               <li class="nav-item">
-                <a class="text-white" href="/adminmonitor">Monitor</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/rostermanagement">Roster</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/managetask">Manage Tasks</a>
-              </li>
-              <li class="nav-item">
-                <a class="text-white" href="/adminpwreset">Reset Password</a>
+                <a class="text-white" href="/agentpwreset">Reset Password</a>
               </li>
               <form action="/logout" method="POST" id="lgo">
                 <button class="btn btn-danger btn-sm"><strong>Logout</strong></button>
@@ -135,28 +129,29 @@
         </div>
       </nav>
       <!--new nav end-->
-    <div class="container">
+      <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <h3>Select Tasks</h3>
                 <!-- non project delivery form -->
+                <h3>Select Tasks</h3>
                 <form action="/addagenttask" method="POST" novalidate class="validated-form" id="npdf">
-                    <p><strong>Non Project Delivery</strong></p>
+                    <h4>Non Project Delivery</h4>
                     <div class="form-group">
                         <select name="taskName" class="form-control" required>
                             <option value="">Select Non Project Delivery Tasks Here</option>
+                            <option value="Shift">Shift</option>
                         <% for (let np of npd) { %>
                             <option value="<%=np.taskName%>"><%=np.taskName%></option>
                         <% } %>
                         </select>
                     </div>
                     <div>
-                        <button class="btn btn-success">START</button>
+                        <button class="btn btn-success" id="btnstart">START</button>
                     </div>
                 </form>
                 <!-- project delivery form -->
                 <form action="/addagenttask" method="POST" novalidate class="validated-form" id="pdf">
-                    <p><strong>Project Delivery</strong></p>
+                    <h4>Project Delivery</h4>
                     <div class="form-group">
                         <select name="taskName" class="form-control" required>
                             <option value="">Select Project Delivery Tasks Here</option>
@@ -166,7 +161,7 @@
                         </select>
                     </div>
                     <div>
-                        <button class="btn btn-success">START</button>
+                        <button class="btn btn-success" id="btnstart">START</button>
                     </div>
                 </form>
             </div>
