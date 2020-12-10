@@ -288,7 +288,7 @@ app.get('/adminmonitor', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
         const tsk = await Task.find({}).sort({taskName: 1});
-        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({created_at: -1});
+        const ongoingTasks = await Agenttask.find({onGoing: true}).sort({userName: 1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
         const agents = await Roster.find({});
         res.render('adminmonitor', { user, endedTasks, agents, tsk, ongoingTasks });
