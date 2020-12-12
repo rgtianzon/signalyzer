@@ -164,10 +164,10 @@ app.put('/agentpwreset', async (req, res) => {
 app.post('/addagenttask', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     const tasktype = await Task.findOne({taskName: req.body.taskName});
-    let random = Math.floor(Math.random()*999999) + 100001
+    let random = Math.floor(Math.random()*99999999) + 100001
     const agentTasksid = await Agenttask.findOne({taskID: random});
     while (agentTasksid !== null) {
-        random = Math.floor(Math.random()*999999) + 100001
+        random = Math.floor(Math.random()*99999999) + 100001
     }
     const fn = user.firstName + " " + user.lastName
     let Manila = momenttz.tz(new Date(), "Asia/Manila");
@@ -311,7 +311,7 @@ app.get('/paginate/:page', async(req, res) => {
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
         const agents = await Roster.find({});
         const { page } = req.params
-        const limit = 20
+        const limit = 50
         const startIndex = (page-1) * limit
         const endIndex = page * limit
         const pages = endedTasks.length / limit
@@ -493,8 +493,13 @@ app.post('/managetask', async (req, res) => {
 // deleting task
 
 app.get('/managetask/:id', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
     const task = await Task.findById(req.params.id)
-    res.render('taskshow', { task });
+    if (user.isActive && user.isAdmin) {
+        res.render('taskshow', { task });
+    } else {
+        res.redirect('/')
+    }
 })
 
 app.delete('/managetask/:id', async (req, res) => {
@@ -503,6 +508,18 @@ app.delete('/managetask/:id', async (req, res) => {
     console.log(id);
     res.redirect('/managetask');
 });
+
+//Reporting.Stats
+
+app.get('/reports', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    if (user.isActive && user.isAdmin) {
+        res.render('adminreports', { user })
+    } else {
+        res.redirect('/')
+    }
+})
+
 
 //API
 
