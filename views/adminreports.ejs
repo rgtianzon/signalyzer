@@ -159,9 +159,7 @@
         let pd = ret.filter((task)=>{
             return task.onGoing == false && task.taskType === "Project Delivery"
         })
-
 // --------------------------------------
-
         var npdArray = [];
 		var npddates = [];   
 
@@ -180,11 +178,9 @@
        		npdArray[index].durationHr += this.durationHr + (this.durationMn/60) + (this.durationSc/60)
    		}
 		});
-
 // --------------------------------
         var pdArray = [];
 		var pddates = [];   
-
 		$.each(pd, function () {
 		// Easiest way to get your required date format
    		var date = new Date(this.created_at).toISOString().replace(/T/, ' ').split(' ')[0];
@@ -239,7 +235,6 @@
             }
         }
     postdata()
-        
 	})
     </script>
 </body>

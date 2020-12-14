@@ -291,8 +291,8 @@ app.get('/adminmonitor', async (req, res) => {
         const ongoingTasks = await Agenttask.find({onGoing: true}).sort({userName: 1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
         const agents = await Roster.find({});
-        const results = endedTasks.slice(0, 20)
-        const pages = endedTasks.length / 20
+        const results = endedTasks.slice(0, 50)
+        const pages = endedTasks.length / 50
         let p = []
         for (i=1; i<pages; i++){
             p.push([i])
@@ -414,12 +414,15 @@ app.post('/rostermanagement', async (req, res) => {
     req.body.sigID = roster[roster.length - 1].sigID + 1;
     const existUserName = await Roster.find({userName: req.body.userName});
     if (existUserName[0] == null) {
-        const { sigID, firstName, lastName, userName, password, isActive, isAdmin } = req.body;
+        const { sigID, firstName, lastName, userName, Title, password, isActive, isAdmin } = req.body;
         const hash = await bcrypt.hash(password, 12);
         const user = new Roster({
             sigID,
             firstName,
             lastName,
+            Department: "Operations",
+            Account: "Signals",
+            Title,
             userName,
             password: hash,
             isActive,

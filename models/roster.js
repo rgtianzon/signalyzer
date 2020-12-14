@@ -5,10 +5,14 @@ const rosterSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     fullName: String,
+    Department: String,
+    Account: String,
+    Title: String,
     userName: String,
     password: String,
     isActive: String,
-    isAdmin: String
+    isAdmin: String,
+    isSuperAdmin: String
 }, { timestamps: { createdAt: 'created_at' } });
 
 const Roster = mongoose.model('Roster', rosterSchema);
