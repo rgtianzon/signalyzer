@@ -119,6 +119,21 @@
         .text-white { 
             padding: 10px;
         }
+        .footer{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color:#343a40;
+            color: white;
+            float:left;
+            text-align: left;
+            font-size: 12px;
+            padding: 10px;
+        }
+        p{
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -177,10 +192,15 @@
                 <input name="confirmpw" type="password" class="form-control" placeholder="Confirm new password" required></input>
             </div>
             <div>
-                <button class="btn btn-success" id="btnlogin"><strong>Change Password</strong></button>
+                <button class="btn btn-success" id="btnlogin">Change Password</button>
             </div>
         </form>
         </div>
+ <!--Footer Start-->
+ <div class="footer" style="margin-bottom:0">
+    <p>Signalyzer v2.0™ | Created by Rupert Tianzon & Ralph Lawrence Villamor</p>
+</div>
+<!--Footer End-->
 
     <script>
         (function () {
