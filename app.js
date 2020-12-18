@@ -96,7 +96,7 @@ app.post('/login', async (req, res) => {
     actUser = user[0]
     const validpw = await bcrypt.compare(password, actUser.password)
     if(validpw){
-        if (actUser.isActive) {
+        if (actUser.isSuperAdmin || actUser.isActive && actUser.Account == "Signals") {
             req.session.user_id = actUser.userName;
             if (actUser.isAdmin) {
                 res.redirect('/adminhome')
@@ -395,8 +395,7 @@ app.get('/adminmonitor2', async (req, res) => {
     
 });
 
-// router management
-
+// roster management
 app.get('/rostermanagement', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     const roster = await Roster.find({}).sort({created_at: -1})
@@ -408,7 +407,6 @@ app.get('/rostermanagement', async (req, res) => {
 })
 
 // adding user
-
 app.post('/rostermanagement', async (req, res) => {
     const roster = await Roster.find({})
     req.body.sigID = roster[roster.length - 1].sigID + 1;
