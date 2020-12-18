@@ -55,6 +55,7 @@
         }
         .container {
             padding: 10px;
+            margin-top: 80px;
         }
         .item {
             width: 100px;
@@ -97,13 +98,28 @@
         .item {
             width: auto;
         }
+        .footer{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color:#343a40;
+            color: white;
+            float:left;
+            text-align: left;
+            font-size: 12px;
+            padding: 10px;
+        }
+        p{
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <!-- navbar start -->
     <div class="pos-f-t">
       <!--new nav start-->
-      <nav class="navbar navbar-light bg-dark">
+      <nav class="navbar navbar-light fixed-top bg-dark">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
@@ -228,6 +244,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div><br>
+     <!--Footer Start-->
+ <div class="footer" style="margin-bottom:0">
+    <p>Signalyzer v2.0™ | Created by Rupert Tianzon & Ralph Lawrence Villamor</p>
+</div>
+<!--Footer End-->
+
 </body>
 </html>

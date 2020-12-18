@@ -30,7 +30,7 @@
         }
         .container {
             padding: 10px;
-            margin-top: 20px;
+            margin-top: 80px;
             width: 100%;
             border-radius: 10px;
         }
@@ -106,12 +106,32 @@
         .text-white { 
             padding: 10px;
         }
+        #myInput, #ended{
+            border-radius: 5px;
+            border-color: transparent;
+            padding-left: 10px;
+        }
+        #footer{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color:#343a40;
+            color: white;
+            float:left;
+            text-align: left;
+            font-size: 12px;
+            padding: 10px;
+        }
+        p{
+            margin: 0;
+        }
     </style>
 </head>
 <body>
     <!-- navbar start -->
     <div class="pos-f-t">
-      <nav class="navbar navbar-light bg-dark">
+      <nav class="navbar navbar-light fixed-top bg-dark">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="/adminhome" id="welcome">Welcome, <%= user.firstName %>!</a>
@@ -151,7 +171,7 @@
             </div>
             <div class="col-md-12">
                 <!-- ongoing tasks -->
-                <p><strong>Real Time Tasks</strong></p>
+                <H4><strong>Real Time Tasks</strong></H4>
                 <div></div>
                 <table class="table" id="ongoingtable">
                     <tr>
@@ -200,12 +220,13 @@
                 </table>
             </div>
             <div class="col-md-12">
+                <hr>
                 <!-- ended tasks -->
                 <div class="col-md-3">
                     <label for="ended">Task History: </label>
                     <input type="text" id="ended" onkeyup="endedFil()" placeholder="Task ID Search.." title="Type in a name">
                 </div>
-                <p><strong>History</strong></p>
+                <H4><strong>History</strong></H4>
                 <table class="table" id="endedTbl">
                     <thead id="oghead">
                         <tr class="table-danger">
@@ -216,6 +237,7 @@
                             <th scope="col">Start</th>
                             <th scope="col">End</th>
                             <th scope="col">Duration</th>
+                            <th scope="col">Comments</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -229,6 +251,7 @@
                                 <td><%= et.startDate %></td>
                                 <td><%= et.endDate %></td>
                                 <td><%= et.durationTime %></td>
+                                <td><%= et.comments %></td>
                                 <td><button class="btn btn-warning" data-toggle="modal" data-target="#<%= et.userName %><%= et.taskID %>">OverRide</button></td>
                             </tr>
                             <div class="modal fade" id="<%= et.userName %><%= et.taskID %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -259,13 +282,13 @@
                                                     <% } %>
                                                 </select>
                                             </div>
-                                            <p>Comments: <%= et.comments %></p>
                                             <div class="form-group">
                                                 <input name="startDate" class="form-control" value="<%= et.startDate %>"></input>
                                             </div>
                                             <div class="form-group">
                                                 <input name="endDate" class="form-control" value="<%= et.endDate %>"></input>
                                             </div>
+                                            <p>Comments: <%= et.comments %></p>
                                             <div class="form-group">
                                                 <textarea name="comments" placeholder="Comments for <%= et.fullName %>: <%= et.taskName %>" class="form-control"></textarea>
                                             </div>
@@ -290,7 +313,12 @@
             </div>
         </div>
     </div>
-
+    <br>  
+    <!--Footer Start-->
+      <div class="footer">
+        <p id="footer">Signalyzer v2.0™ | Created by Rupert Tianzon & Ralph Lawrence Villamor</p>
+    </div>
+    <!--Footer End-->
     <script>
         function convertTZ(date, tzString) {
             return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
