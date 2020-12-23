@@ -572,7 +572,7 @@ app.get('/reports', async (req, res) => {
 //API
 
 app.get('/roster/api', async (req, res) => {
-    const user = await Roster.find({});
+    const user = await Roster.find({}).sort({firstName: 1});
     res.send(user)
 })
 
