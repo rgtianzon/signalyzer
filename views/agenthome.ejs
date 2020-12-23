@@ -250,7 +250,7 @@
                     <th scope="col">Comments</th>
                 </tr>
                 <tbody>
-                    <% for (let et of endedTasks) { %>
+                    <% for (let et of results) { %>
                         <tr class="table-info">
                             <td><%= et.taskID %></td>
                             <td><%= et.taskName %></td>
@@ -265,7 +265,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <% for (let page of p){ %>
-                        <li class="page-item"><a class="page-link" href="/paginate/<%= page %>"><%= page %></a></li>
+                        <li class="page-item"><a class="page-link" href="/agenthomepaginate/<%= page %>"><%= page %></a></li>
                     <% } %>
                 </ul>
             </nav>

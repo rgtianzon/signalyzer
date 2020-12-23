@@ -120,9 +120,18 @@ app.get('/agenthome', async (req, res) => {
         if (user.isAdmin) {
             res.redirect('/adminhome')
         } else {
+            const results = endedTasks.slice(0, 50)
+            const pages = endedTasks.length / 50
+            console.log(pages)
+            let p = []
+            for (i=1; i<pages; i++){
+                console.log(i)
+                p.push([i])
+            }
+            console.log(p)
             const npd = await Task.find({taskType: 'Non-Project Delivery'}).sort({taskName: 1});
             const pd = await Task.find({taskType: 'Project Delivery'}).sort({taskName: 1});
-            res.render('agenthome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks})
+            res.render('agenthome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks, results, p})
         }
     } else {
         res.redirect('/');
@@ -139,6 +148,7 @@ app.get('/agenthomepaginate/:page', async (req, res) => {
         const { page } = req.params
         const limit = 50
         const startIndex = (page-1) * limit
+        const endIndex = page * limit
         const pages = endedTasks.length / limit
         let p = []
         for (i=1; i<pages; i++){
@@ -157,7 +167,9 @@ app.get('/agenthomepaginate/:page', async (req, res) => {
                 limit: limit
             }
         }
-        res.render('agenthome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks, p})
+        const npd = await Task.find({taskType: 'Non-Project Delivery'}).sort({taskName: 1});
+        const pd = await Task.find({taskType: 'Project Delivery'}).sort({taskName: 1});
+        res.render('agenthome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks, results, p})
     } else {
         res.redirect('/')
     }
