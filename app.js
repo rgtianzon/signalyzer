@@ -129,6 +129,40 @@ app.get('/agenthome', async (req, res) => {
     }
 });
 
+// agent home pagination
+app.get('/agenthomepaginate/:page', async (req, res) => {
+    const user = await Roster.findOne({userName: req.session.user_id});
+    const agentTasks = await Agenttask.find({userName: req.session.user_id}).sort({created_at: -1});
+    const ongoingTasks = await Agenttask.find({userName: req.session.user_id, onGoing: true}).sort({created_at: -1});
+    const endedTasks = await Agenttask.find({userName: req.session.user_id, onGoing: false}).sort({created_at: -1});
+    if(user.isActive){
+        const { page } = req.params
+        const limit = 50
+        const startIndex = (page-1) * limit
+        const pages = endedTasks.length / limit
+        let p = []
+        for (i=1; i<pages; i++){
+            p.push([i])
+        }
+        let results = endedTasks.slice(startIndex, endIndex)
+        if (endIndex < endedTasks.length) {
+            results.next = {
+                page: page + 1,
+                limit: limit
+            }
+        }
+        if (startIndex > 0){
+            results.prev = {
+                page: page - 1,
+                limit: limit
+            }
+        }
+        res.render('agenthome', { npd, pd, user, agentTasks, ongoingTasks, endedTasks, p})
+    } else {
+        res.redirect('/')
+    }
+
+})
 
 // agent  password reset
 app.get('/agentpwreset', async (req, res) => {
@@ -303,6 +337,7 @@ app.get('/adminmonitor', async (req, res) => {
     }
 });
 
+// admin monitor paginatoin
 app.get('/paginate/:page', async(req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
