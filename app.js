@@ -571,6 +571,11 @@ app.get('/reports', async (req, res) => {
 
 //API
 
+app.get('/roster/api', async (req, res) => {
+    const user = await Roster.find({});
+    res.send(user)
+})
+
 app.get('/signalyzer/api', async (req, res) => {
     const data = await Agenttask.find({})
     res.send(data)
