@@ -303,19 +303,21 @@
                         <% } %>
                     </tbody>
                 </table>
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
+                <form action="/paginate" method="POST">
+                    <label for="cars">Select page:</label>
+                    <select id="cars" name="page">
                         <% for (let page of p){ %>
-                            <li class="page-item"><a class="page-link" href="/paginate/<%= page %>"><%= page %></a></li>
+                            <option value="<%= page %>"><%= page %></option>
                         <% } %>
-                    </ul>
-                </nav>
+                    </select>
+                    <input type="submit">
+                </form>
             </div>
         </div>
     </div>
     <br>  
     <!--Footer Start-->
-      <div class="footer">
+    <div class="footer">
         <p id="footer">Signalyzer v2.0™ | Created by Rupert Tianzon & Ralph Lawrence Villamor</p>
     </div>
     <!--Footer End-->

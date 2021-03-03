@@ -139,13 +139,13 @@ app.get('/agenthome', async (req, res) => {
 });
 
 // agent home pagination
-app.get('/agenthomepaginate/:page', async (req, res) => {
+app.post('/agenthomepaginate', async (req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     const agentTasks = await Agenttask.find({userName: req.session.user_id}).sort({created_at: -1});
     const ongoingTasks = await Agenttask.find({userName: req.session.user_id, onGoing: true}).sort({created_at: -1});
     const endedTasks = await Agenttask.find({userName: req.session.user_id, onGoing: false}).sort({created_at: -1});
     if(user.isActive){
-        const { page } = req.params
+        const { page } = req.body
         const limit = 50
         const startIndex = (page-1) * limit
         const endIndex = page * limit
@@ -350,14 +350,14 @@ app.get('/adminmonitor', async (req, res) => {
 });
 
 // admin monitor paginatoin
-app.get('/paginate/:page', async(req, res) => {
+app.post('/paginate', async(req, res) => {
     const user = await Roster.findOne({userName: req.session.user_id});
     if(user.isActive && user.isAdmin) {
         const tsk = await Task.find({}).sort({taskName: 1});
         const ongoingTasks = await Agenttask.find({onGoing: true}).sort({userName: 1});
         const endedTasks = await Agenttask.find({onGoing: false}).sort({created_at: -1});
         const agents = await Roster.find({});
-        const { page } = req.params
+        const { page } = req.body
         const limit = 50
         const startIndex = (page-1) * limit
         const endIndex = page * limit

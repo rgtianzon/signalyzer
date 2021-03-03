@@ -262,13 +262,15 @@
                     <% } %>
                 </tbody>
             </table>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
+            <form action="/agenthomepaginate" method="POST">
+                <label for="cars">Select page:</label>
+                <select id="cars" name="page">
                     <% for (let page of p){ %>
-                        <li class="page-item"><a class="page-link" href="/agenthomepaginate/<%= page %>"><%= page %></a></li>
+                        <option value="<%= page %>"><%= page %></option>
                     <% } %>
-                </ul>
-            </nav>
+                </select>
+                <input type="submit">
+            </form>
         </div>
 
     </div><br>
