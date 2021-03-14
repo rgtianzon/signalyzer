@@ -334,9 +334,9 @@
             let start = new Date(actime).getTime()
             // let now = convertTZ(new Date(), "Asia/Manila")
             // let distance = convertTZ(new Date(), "Asia/Manila") - start;
-            let hours = Math.floor((convertTZ(new Date(), "Asia/Manila") - start % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((convertTZ(new Date(), "Asia/Manila") - start % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((convertTZ(new Date(), "Asia/Manila") - start % (1000 * 60)) / 1000);
+            let hours = Math.floor(((convertTZ(new Date(), "Asia/Manila") - start) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor(((convertTZ(new Date(), "Asia/Manila") - start) % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor(((convertTZ(new Date(), "Asia/Manila") - start) % (1000 * 60)) / 1000);
             runtime[i].innerHTML=hours + "h " + minutes + "m " + seconds + "s"
             }
         }, 1000)
