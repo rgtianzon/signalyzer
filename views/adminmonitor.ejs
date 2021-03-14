@@ -332,8 +332,8 @@
             for (i=0; i<stime.length; i++) {
             let actime = stime[i].innerHTML
             let start = new Date(actime).getTime()
-            let now = convertTZ(new Date(), "Asia/Manila")
-            let distance = now - start;
+            // let now = convertTZ(new Date(), "Asia/Manila")
+            let distance = convertTZ(new Date(), "Asia/Manila") - start;
             let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             let seconds = Math.floor((distance % (1000 * 60)) / 1000);
